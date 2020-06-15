@@ -180,73 +180,47 @@ public class Sudoku {
 
     // Takes a complete sudoku board and removes cells to create a sudoku puzzle
     private void prepare_puzzle() {
+        this.board_emptied = new int[this.board_size][this.board_size];
         for(int row = 0; row < this.board_size; row++) {
             for(int col = 0; col < this.board_size; col++) {
                 this.board_temp[row][col] = this.board_filled[row][col];
             }
         }
-        int num_removed = 0;
-        int max_remove;
-        if (this.cell_size == 2) {
-            max_remove = 12;
-        }
-        else if (this.cell_size == 3) {
-            max_remove = 52;
-        }
-        else if (this.cell_size == 4) {
-            max_remove = 150;
-        }
-        else {
-            max_remove = 0;
-        }
-        int temp;
-        int row;
-        int col;
-        int solutions;
-        int[] num_count = new int[board_size];
 
-        for (int num = 0; num < board_size; num++) {
-            num_count[num] = board_size;
+        // int[] counts = new int[this.board_size];
+        // for(int i = 0; i < this.board_size; i++) {
+        //     counts[i] = 0;
+        // }
+        for(int i = 0; i < this.board_size; i++) {
+            for(int j = 0; j < this.board_size; j++) {
+                this.board_emptied[i][j] = 0;
+            }
         }
-        do {
-            // Randomly remove a number
-            // Make sure at least 1 of each number remains on the board
-
-            do {
-                row = get_random(board_size);
-                col = get_random(board_size);
-                temp = board_temp[row][col];
-            } while (temp == 0 || num_count[temp - 1] < 2);
-            board_temp[row][col] = 0;
-            num_count[temp - 1]--;
-            num_removed++;
-            solutions = num_solutions(0, 0, board_temp, 0);
-        } while (num_removed < max_remove &&  solutions < 2);
-        if (solutions > 1) {
-            board_temp[row][col] = temp;
+        // Randomly pick 3 of each number and keep them, zeroing out the rest.
+        int row, col, num;
+        for(int i = 1; i <= this.board_size; i++) {
+            for(int j = 0; j < this.cell_size; j++) {
+                do {
+                    row = get_random(this.board_size);
+                    col = get_random(this.board_size);
+                    num = this.board_temp[row][col];
+                } while(num != i || this.board_emptied[row][col] != 0 || num_in_block(this.board_emptied, row, col) > 4);
+                this.board_emptied[row][col] = num;
+            }
         }
+    }
 
-        int num_remaining = this.board_size * this.board_size - num_removed;
-        this.board_emptied = new int[this.board_size][this.board_size];
-        if (num_removed < num_remaining) {
-            for(int i = 0; i < this.board_size; i++) {
-                for(int j = 0; j < this.board_size; j++) {
-                    if (board_temp[i][j] == 0) {
-                        this.board_emptied[i][j] = this.board_filled[i][j];
-                    }
-                    else {
-                        this.board_emptied[i][j] = 0;
-                    }
+    // Returns number of filled cells in same block as input row and col;
+    private int num_in_block(int[][] board, int row, int col) {
+        int count = 0;
+        for(int i = 0; i < this.board_size; i++) {
+            for(int j = 0; j < this.board_size; j++) {
+                if(i / 3 == row / 3 && j / 3 == col / 3 && board[i][j] != 0) {
+                    count++;
                 }
             }
         }
-        else {
-            for(int i = 0; i < this.board_size; i++) {
-                for(int j = 0; j < this.board_size; j++) {
-                    this.board_emptied[i][j] = board_temp[i][j];
-                }
-            }
-        }
+        return count;
     }
 
     private int num_count(int num, int[][] board) {
