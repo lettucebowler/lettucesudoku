@@ -2,6 +2,7 @@ package com.lettucebowler.lettucesudoku.domains.sudoku;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Random;
 import java.util.Arrays;
 
@@ -181,31 +182,70 @@ public class Sudoku {
     // Takes a complete sudoku board and removes cells to create a sudoku puzzle
     private void prepare_puzzle() {
         this.board_emptied = new int[this.board_size][this.board_size];
-        for(int row = 0; row < this.board_size; row++) {
-            for(int col = 0; col < this.board_size; col++) {
+        for (int row = 0; row < this.board_size; row++) {
+            for (int col = 0; col < this.board_size; col++) {
                 this.board_temp[row][col] = this.board_filled[row][col];
             }
         }
+        int num_removed = 0;
+        int max_remove;
+        if (this.cell_size == 2) {
+            max_remove = 12;
+        } else if (this.cell_size == 3) {
+            max_remove = 51;
+        } else if (this.cell_size == 4) {
+            max_remove = 150;
+        } else {
+            max_remove = 0;
+        }
+        int temp;
+        int row;
+        int col;
+        int solutions;
+        int[] num_count = new int[board_size];
 
-        // int[] counts = new int[this.board_size];
-        // for(int i = 0; i < this.board_size; i++) {
-        //     counts[i] = 0;
-        // }
+        // create a list of valid spots to remove numbers from
+        ArrayList<int[]> valid_positions = new ArrayList<>();
         for(int i = 0; i < this.board_size; i++) {
             for(int j = 0; j < this.board_size; j++) {
-                this.board_emptied[i][j] = 0;
+                int[] pos = new int[2];
+                pos[0] = i;
+                pos[1] = j;
+                valid_positions.add(pos);
             }
         }
-        // Randomly pick 3 of each number and keep them, zeroing out the rest.
-        int row, col, num;
-        for(int i = 1; i <= this.board_size; i++) {
-            for(int j = 0; j < this.cell_size; j++) {
-                do {
-                    row = get_random(this.board_size);
-                    col = get_random(this.board_size);
-                    num = this.board_temp[row][col];
-                } while(num != i || this.board_emptied[row][col] != 0 || num_in_block(this.board_emptied, row, col) > 4);
-                this.board_emptied[row][col] = num;
+
+        // list of count for each number on board
+        for (int num = 0; num < this.board_size; num++) {
+            num_count[num] = this.board_size;
+        }
+
+        int rand_pos;
+        int iterations = 0;
+        do {
+                 rand_pos = get_random(valid_positions.size());
+                 int[] tmp_pos = valid_positions.get(rand_pos);
+                 row = tmp_pos[0];
+                 col = tmp_pos[1];
+                 temp = board_temp[row][col];
+             board_temp[row][col] = 0;
+             valid_positions.remove(rand_pos);
+             solutions = num_solutions(0, 0, board_temp, 0);
+             if(solutions > 1) {
+                 board_temp[row][col] = temp;
+             }
+             else {
+                 num_count[temp - 1]--;
+                 num_removed++;
+             }
+             iterations++;
+        } while (num_removed < max_remove);
+        System.out.println(String.format(Locale.US, "Prep iterations: %d", iterations));
+
+        this.board_emptied = new int[this.board_size][this.board_size];
+        for (int i = 0; i < this.board_size; i++) {
+            for (int j = 0; j < this.board_size; j++) {
+                this.board_emptied[i][j] = board_temp[i][j];
             }
         }
     }

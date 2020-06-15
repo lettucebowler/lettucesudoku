@@ -187,7 +187,9 @@ public class MainActivity extends AppCompatActivity {
         Button reset_button = (Button) findViewById(R.id.button_reset);
         reset_button.setOnClickListener(View -> {
             problem = new SudokuProblem(order);
+            reset_button.setEnabled(false);
             reset_board();
+            reset_button.setEnabled(true);
         });
     }
 
