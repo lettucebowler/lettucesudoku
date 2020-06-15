@@ -236,6 +236,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < board_size; i++) {
             TableRow row = new TableRow(this);
             row.setLayoutParams(l);
+            row.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
             row.setGravity(Gravity.CENTER);
             for (int j = 0; j < board_size; j++) {
                 SquareTextView gridButton = make_board_button(this, i, j);
@@ -267,19 +268,20 @@ public class MainActivity extends AppCompatActivity {
         p.weight = 1;
         int start = 0;
         int end = board_size - 1;
-        p.setMargins(2, 2, 2, 2);
+        p.setMargins(3, 3, 3, 3);
+//        p.setMargins(0, 0, 8, 0);
         // Thicken Boarders
-        if(i == start) {
-            p.setMargins(p.leftMargin, 2, p.rightMargin, p.bottomMargin);
-        }
-        if(j == start) {
-            p.setMargins(2, p.topMargin, p.rightMargin, p.bottomMargin);
-        }
-        if (i % block_size == block_size - 1) {
+//        if(i == start) {
+//            p.setMargins(p.leftMargin, 2, p.rightMargin, p.bottomMargin);
+//        }
+//        if(j == start) {
+//            p.setMargins(2, p.topMargin, p.rightMargin, p.bottomMargin);
+//        }
+        if (i % block_size == block_size - 1 && i != end) {
             p.setMargins(p.leftMargin, p.topMargin, p.rightMargin, 4);
         }
-        if (j % block_size == block_size - 1) {
-            p.setMargins(p.leftMargin, p.topMargin, 4, p.bottomMargin);
+        if (j % block_size == block_size - 1 && j != end) {
+            p.setMargins(p.leftMargin, p.topMargin, 6, p.bottomMargin);
         }
         board_button.setLayoutParams(p);
     }
