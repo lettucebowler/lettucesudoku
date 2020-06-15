@@ -243,20 +243,7 @@ public class MainActivity extends AppCompatActivity {
             }
             sudoku_view.addView(row);
         }
-//        sudoku_view.setColumnCount(board_size);
-////        sudoku_view.setRowCount(board_size);
-//        sudoku_view.
-////        sudokuView.set
-//        for(int i = 0; i < board_size; i++) {
-//            for(int j = 0; j < board_size; j++) {
-//                LinearLayout temp = new LinearLayout(this);
-//                SquareTextView gridCell = make_board_button(this, i, j);
-//                temp.addView(gridCell);
-//                temp.setGravity(Gravity.CENTER_HORIZONTAL);
-//                temp.setOrientation(LinearLayout.HORIZONTAL);
-//                sudoku_view.addView(temp);
-//            }
-//        }
+
         white_out_board();
         update_board();
     }
@@ -288,12 +275,6 @@ public class MainActivity extends AppCompatActivity {
         if(j == start) {
             p.setMargins(2, p.topMargin, p.rightMargin, p.bottomMargin);
         }
-//        if(i == end) {
-//            p.setMargins(p.leftMargin, p.topMargin, p.rightMargin, 2);
-//        }
-//        if(j == end) {
-//            p.setMargins(p.leftMargin, p.topMargin, 2, p.bottomMargin);
-//        }
         if (i % block_size == block_size - 1) {
             p.setMargins(p.leftMargin, p.topMargin, p.rightMargin, 4);
         }
