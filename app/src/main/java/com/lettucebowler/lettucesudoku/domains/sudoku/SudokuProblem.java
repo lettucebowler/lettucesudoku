@@ -48,9 +48,38 @@ public class SudokuProblem extends Problem {
         boolean complete = true;
         int[][] current_board = ((SudokuState) this.getCurrentState()).getTiles();
         int[][] final_board = ((SudokuState) this.getFinalState()).getTiles();
-        for(int i = 0; i < this.get_sudoku().get_board_size(); i++) {
+        for(int i = 0; i < current_board.length; i++) {
             if (current_board[row][i] != final_board[row][i]) {
                 complete = false;
+            }
+        }
+        return complete;
+    }
+
+    public boolean is_column_complete(int col) {
+        boolean complete = true;
+        int[][] current_board = ((SudokuState) this.getCurrentState()).getTiles();
+        int[][] final_board = ((SudokuState) this.getFinalState()).getTiles();
+        for(int i = 0; i < current_board.length; i++) {
+            if (current_board[i][col] != final_board[i][col]) {
+                complete = false;
+            }
+        }
+        return complete;
+    }
+
+    public boolean is_block_complete(int row, int col) {
+        boolean complete = true;
+        int[][] current_board = ((SudokuState) this.getCurrentState()).getTiles();
+        int[][] final_board = ((SudokuState) this.getFinalState()).getTiles();
+        int cell_size = this.sudoku.get_cell_size();
+        for(int i = 0; i < current_board.length; i++) {
+            for(int j = 0; j < current_board.length; j++) {
+                if(i / cell_size == row / cell_size && j / cell_size == col / cell_size) {
+                    if(current_board[i][j] != final_board[i][j]) {
+                        complete = false;
+                    }
+                }
             }
         }
         return complete;
