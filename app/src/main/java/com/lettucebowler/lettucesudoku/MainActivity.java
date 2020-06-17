@@ -30,8 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     private SudokuProblem problem;
     private SolvingAssistant assistant;
-    private TableLayout sudoku_view;
-//    private GridLayout sudoku_view;
+    private GridLayout sudoku_view;
     private Button hint_button;
     private int board_size;
     private int block_size;
@@ -66,11 +65,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initialize_members() {
-//        order = 4;
         problem = new SudokuProblem(order);
         assistant = new SolvingAssistant(problem);
-        sudoku_view = findViewById(R.id.sudoku_grid);
-//        sudoku_view = findViewById(R.id.number_grid);
+        sudoku_view = findViewById(R.id.number_grid);
         board_size = ((SudokuState)problem.getCurrentState()).getTiles().length;
         block_size = (int)Math.sqrt(board_size);
         hints = new ArrayList<>();
@@ -231,22 +228,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initialize_board() {
-//        sudoku_view.removeAllViews();
-        sudoku_view.setGravity(Gravity.CENTER);
-        TableLayout.LayoutParams l = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
-        l.weight = 1;
-        for (int i = 0; i < board_size; i++) {
-            TableRow row = new TableRow(this);
-            row.setLayoutParams(l);
-            row.setShowDividers(LinearLayout.SHOW_DIVIDER_MIDDLE);
-            row.setGravity(Gravity.CENTER);
-            for (int j = 0; j < board_size; j++) {
-                SquareTextView gridButton = make_board_button(this, i, j);
-                row.addView(gridButton);
-            }
-            sudoku_view.addView(row);
-        }
+        sudoku_view.setColumnCount(board_size);
+        for(int i = 0; i < board_size * board_size; i++) {
+            SquareTextView gridButton = make_board_button(this, i / board_size, i % board_size);
+            sudoku_view.addView(gridButton);
+            int width = sudoku_view.getWidth() / board_size;
+            gridButton.setWidth(width);
+            gridButton.setHeight(width);
 
+        }
         white_out_board();
         update_board();
     }
@@ -257,33 +247,22 @@ public class MainActivity extends AppCompatActivity {
         board_button.setTag(new TableData(i, j));
         set_board_button_actions(board_button, i, j);
         board_button.setTextSize(32);
-//        board_button.setPadding(0, 0, 0, 0);
         board_button.setIncludeFontPadding(false);
         board_button.setGravity(Gravity.CENTER);
         return board_button;
     }
 
     private void set_board_button_margins(SquareTextView board_button, int i, int j) {
-        TableRow.LayoutParams p = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
-//        GridLayout.LayoutParams p = new GridLayout.LayoutParams();
-//        p.setGravity(Gravity.CENTER_VERTICAL);
-        p.weight = 1;
+        GridLayout.LayoutParams p = new GridLayout.LayoutParams();
+        p.setGravity(Gravity.CENTER_VERTICAL);
         int start = 0;
         int end = board_size - 1;
-        p.setMargins(3, 3, 3, 3);
-//        p.setMargins(0, 0, 8, 0);
-        // Thicken Boarders
-//        if(i == start) {
-//            p.setMargins(p.leftMargin, 2, p.rightMargin, p.bottomMargin);
-//        }
-//        if(j == start) {
-//            p.setMargins(2, p.topMargin, p.rightMargin, p.bottomMargin);
-//        }
+        p.setMargins(1, 1, 1, 1);
         if (i % block_size == block_size - 1 && i != end) {
             p.setMargins(p.leftMargin, p.topMargin, p.rightMargin, 4);
         }
         if (j % block_size == block_size - 1 && j != end) {
-            p.setMargins(p.leftMargin, p.topMargin, 6, p.bottomMargin);
+            p.setMargins(p.leftMargin, p.topMargin, 4, p.bottomMargin);
         }
         board_button.setLayoutParams(p);
     }
@@ -476,8 +455,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             super.onMeasure(widthMeasureSpec, widthMeasureSpec);
-            int width = MeasureSpec.getSize(widthMeasureSpec);
-            int height = MeasureSpec.getSize(heightMeasureSpec);
+            int width = (int)((double) MeasureSpec.getSize(widthMeasureSpec) / 9.5);
+            int height = (int)((double) MeasureSpec.getSize(widthMeasureSpec) / 9.5);
             int size = Math.min(width, height);
             setMeasuredDimension(size, size); // make it square
 //            setMeasuredDimension(150, 150);
