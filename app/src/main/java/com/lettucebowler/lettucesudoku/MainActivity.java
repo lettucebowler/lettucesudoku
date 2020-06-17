@@ -276,8 +276,22 @@ public class MainActivity extends AppCompatActivity {
 
     private void highlight_on_click() {
         white_out_board();
+        highlight_correct();
         highlight_num_row_col_block();
         highlight_all_of_num();
+
+    }
+
+    private void highlight_correct() {
+        ArrayList<View> layoutButtons = sudoku_view.getTouchables();
+        for (View view : layoutButtons) {
+            TableData position = (TableData) view.getTag();
+            int pos_row = position.RowIndex;
+            int pos_col = position.ColumnIndex;
+            if(problem.is_row_complete(pos_row) || problem.is_column_complete(pos_col) || problem.is_block_complete(pos_row, pos_col)) {
+                ((SquareTextView) view).setBackgroundColor(success_bg_light);
+            }
+        }
     }
 
     private void highlight_all_of_num() {
@@ -315,7 +329,7 @@ public class MainActivity extends AppCompatActivity {
             boolean same_col = pos_col == selected_col;
 
             // highlight if same row or col
-            if (pos_row == selected_row || pos_col == selected_col) {
+            if (same_row || same_col) {
                 view.setBackgroundColor(color_correct_bg_light);
             }
             // highlight if same block
@@ -349,17 +363,20 @@ public class MainActivity extends AppCompatActivity {
             int row = ((TableData) view.getTag()).RowIndex;
             int col = ((TableData) view.getTag()).ColumnIndex;
 
-            if (problem.is_correct(row, col)) {
+            if(problem.is_correct(row, col)) {
                 ((SquareTextView) view).setTextColor(color_correct_text);
             }
             else {
                 ((SquareTextView) view).setTextColor(color_incorrect_text);
             }
-            if (problem.is_initial_hint(row, col)) {
+            if(problem.is_initial_hint(row, col)) {
                 ((SquareTextView) view).setTextColor(color_default_text);
             }
-            if (given_as_hint(row, col, hints)) {
+            if(given_as_hint(row, col, hints)) {
                 ((SquareTextView) view).setTextColor(color_hint_text);
+            }
+            if(problem.is_row_complete(row) || problem.is_column_complete(col) || problem.is_block_complete(row, col)) {
+                ((SquareTextView) view).setBackgroundColor(success_bg_light);
             }
         }
         if (problem.success()) {
