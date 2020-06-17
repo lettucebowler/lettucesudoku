@@ -35,6 +35,8 @@ public class Sudoku {
         return this.board_size;
     }
 
+    public int get_cell_size() { return this.cell_size; }
+
     public void generate_filled() {
         this.board_size = this.cell_size * this.cell_size;
         this.board_filled = new int[this.board_size][this.board_size];
