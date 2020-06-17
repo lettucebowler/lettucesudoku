@@ -108,12 +108,8 @@ public class MainActivity extends AppCompatActivity {
         TableData remove_data = new TableData(rows - 1, cols - 1);
         remove_button.setTag(remove_data);
         remove_button.setOnClickListener(e -> {
-            int[][] initial_board = ((SudokuState) problem.getInitialState()).getTiles();
-            boolean is_initial_hint;
-
             if (cell_has_been_selected) {
-                is_initial_hint = initial_board[selected_row][selected_col] != 0;
-                if (!is_initial_hint) {
+                if (!problem.is_initial_hint(selected_row, selected_col)) {
                     do_move(0, selected_row, selected_col);
                 }
             }
@@ -352,19 +348,18 @@ public class MainActivity extends AppCompatActivity {
             ((SquareTextView) view).setText(buttonText);
             int row = ((TableData) view.getTag()).RowIndex;
             int col = ((TableData) view.getTag()).ColumnIndex;
-            boolean is_initial_hint = initial_tiles[row][col] != 0;
-            boolean is_correct = current_tiles[row][col] == final_tiles[row][col];
-            if (is_initial_hint) {
-                ((SquareTextView) view).setTextColor(color_default_text);
-            }
-            else if (is_correct) {
+
+            if (problem.is_correct(row, col)) {
                 ((SquareTextView) view).setTextColor(color_correct_text);
+            }
+            else {
+                ((SquareTextView) view).setTextColor(color_incorrect_text);
+            }
+            if (problem.is_initial_hint(row, col)) {
+                ((SquareTextView) view).setTextColor(color_default_text);
             }
             if (given_as_hint(row, col, hints)) {
                 ((SquareTextView) view).setTextColor(color_hint_text);
-            }
-            if (current_tiles[row][col] != final_tiles[row][col]) {
-                ((SquareTextView) view).setTextColor(color_incorrect_text);
             }
         }
         if (problem.success()) {

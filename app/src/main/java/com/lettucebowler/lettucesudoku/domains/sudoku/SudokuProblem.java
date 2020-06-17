@@ -36,6 +36,26 @@ public class SudokuProblem extends Problem {
         return sudoku;
     }
 
+    public boolean is_initial_hint(int row, int col) {
+        return ((SudokuState) this.getInitialState()).getTiles()[row][col] != 0;
+    }
+
+    public boolean is_correct(int row, int col) {
+        return ((SudokuState) this.getCurrentState()).getTiles()[row][col] == ((SudokuState) this.getFinalState()).getTiles()[row][col];
+    }
+
+    public boolean is_row_complete(int row) {
+        boolean complete = true;
+        int[][] current_board = ((SudokuState) this.getCurrentState()).getTiles();
+        int[][] final_board = ((SudokuState) this.getFinalState()).getTiles();
+        for(int i = 0; i < this.get_sudoku().get_board_size(); i++) {
+            if (current_board[row][i] != final_board[row][i]) {
+                complete = false;
+            }
+        }
+        return complete;
+    }
+
     @Override
     public boolean success() {
         return getCurrentState().equals(getFinalState());
