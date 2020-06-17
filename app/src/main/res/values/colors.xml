@@ -4,12 +4,12 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="colorCorrectBGLight">#CCCCFF</color>
-    <color name="colorCorrectBGDark">#9999FF</color>
+    <color name="colorCorrectBGDark">#7777FF</color>
     <color name="colorBoardBG">#EEEEEE</color>
     <color name="colorIncorrectBGLight">#FFCCCC</color>
-    <color name="colorIncorrectBGDark">#FF9999</color>
+    <color name="colorIncorrectBGDark">#FF7777</color>
     <color name="colorSuccessBGLight">#CCFFCC</color>
-    <color name="colorSuccessBGDark">#99FF99</color>
+    <color name="colorSuccessBGDark">#77FF77</color>
     <color name="colorDefaultText">#000000</color>
     <color name="colorCorrectText">#0000FF</color>
     <color name="colorIncorrectText">#FF0000</color>
