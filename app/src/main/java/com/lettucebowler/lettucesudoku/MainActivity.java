@@ -276,23 +276,24 @@ public class MainActivity extends AppCompatActivity {
 
     private void highlight_on_click() {
         white_out_board();
-        highlight_correct();
+//        highlight_correct();
+        highlight_num_row_col_block();
         highlight_num_row_col_block();
         highlight_all_of_num();
 
     }
 
-    private void highlight_correct() {
-        ArrayList<View> layoutButtons = sudoku_view.getTouchables();
-        for (View view : layoutButtons) {
-            TableData position = (TableData) view.getTag();
-            int pos_row = position.RowIndex;
-            int pos_col = position.ColumnIndex;
-            if(problem.is_row_complete(pos_row) || problem.is_column_complete(pos_col) || problem.is_block_complete(pos_row, pos_col)) {
-                ((SquareTextView) view).setBackgroundColor(success_bg_light);
-            }
-        }
-    }
+//    private void highlight_correct() {
+//        ArrayList<View> layoutButtons = sudoku_view.getTouchables();
+//        for (View view : layoutButtons) {
+//            TableData position = (TableData) view.getTag();
+//            int pos_row = position.RowIndex;
+//            int pos_col = position.ColumnIndex;
+//            if(problem.is_row_complete(pos_row) || problem.is_column_complete(pos_col) || problem.is_block_complete(pos_row, pos_col)) {
+//                ((SquareTextView) view).setBackgroundColor(success_bg_light);
+//            }
+//        }
+//    }
 
     private void highlight_all_of_num() {
         ArrayList<View> layoutButtons = sudoku_view.getTouchables();
@@ -344,12 +345,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void update_board() {
-        SudokuState current_state = (SudokuState) problem.getCurrentState();
-        SudokuState initial_state = (SudokuState) problem.getInitialState();
-        SudokuState final_state = (SudokuState) problem.getFinalState();
-        int[][] current_tiles = current_state.getTiles();
-        int[][] initial_tiles = initial_state.getTiles();
-        int[][] final_tiles = final_state.getTiles();
+        int[][] current_tiles = ((SudokuState) problem.getCurrentState()).getTiles();
 
         if (cell_has_been_selected) {
             highlight_on_click();
@@ -374,9 +370,6 @@ public class MainActivity extends AppCompatActivity {
             }
             if(given_as_hint(row, col, hints)) {
                 ((SquareTextView) view).setTextColor(color_hint_text);
-            }
-            if(problem.is_row_complete(row) || problem.is_column_complete(col) || problem.is_block_complete(row, col)) {
-                ((SquareTextView) view).setBackgroundColor(success_bg_light);
             }
         }
         if (problem.success()) {
