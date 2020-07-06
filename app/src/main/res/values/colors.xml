@@ -9,7 +9,7 @@
     <color name="colorIncorrectBGLight">#FFCCCC</color>
     <color name="colorIncorrectBGDark">#FF7777</color>
     <color name="colorSuccessBGLight">#CCFFCC</color>
-    <color name="colorSuccessBGDark">#77FF77</color>
+    <color name="colorSuccessBGDark">#CCFFCC</color>
     <color name="colorDefaultText">#000000</color>
     <color name="colorCorrectText">#0000FF</color>
     <color name="colorIncorrectText">#FF0000</color>
