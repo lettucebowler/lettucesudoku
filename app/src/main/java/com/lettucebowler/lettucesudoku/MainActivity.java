@@ -1,14 +1,11 @@
 package com.lettucebowler.lettucesudoku;
 
 import android.content.Context;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.GridView;
-import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.Toast;
@@ -23,8 +20,6 @@ import com.lettucebowler.lettucesudoku.framework.problem.SolvingAssistant;
 
 import java.util.ArrayList;
 import java.util.Locale;
-
-import static androidx.gridlayout.widget.GridLayout.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -251,7 +246,6 @@ public class MainActivity extends AppCompatActivity {
     private void set_board_button_margins(SquareTextView board_button, int i, int j) {
         GridLayout.LayoutParams p = new GridLayout.LayoutParams();
         p.setGravity(Gravity.CENTER_VERTICAL);
-        int start = 0;
         int end = board_size - 1;
         p.setMargins(1, 1, 1, 1);
         if (i % block_size == block_size - 1 && i != end) {
@@ -276,24 +270,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void highlight_on_click() {
         white_out_board();
-//        highlight_correct();
         highlight_num_row_col_block();
         highlight_num_row_col_block();
         highlight_all_of_num();
 
     }
-
-//    private void highlight_correct() {
-//        ArrayList<View> layoutButtons = sudoku_view.getTouchables();
-//        for (View view : layoutButtons) {
-//            TableData position = (TableData) view.getTag();
-//            int pos_row = position.RowIndex;
-//            int pos_col = position.ColumnIndex;
-//            if(problem.is_row_complete(pos_row) || problem.is_column_complete(pos_col) || problem.is_block_complete(pos_row, pos_col)) {
-//                ((SquareTextView) view).setBackgroundColor(success_bg_light);
-//            }
-//        }
-//    }
 
     private void highlight_all_of_num() {
         ArrayList<View> layoutButtons = sudoku_view.getTouchables();
