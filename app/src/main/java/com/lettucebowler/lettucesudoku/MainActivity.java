@@ -24,7 +24,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
     private SudokuProblem problem;
-    private SolvingAssistant assistant;
+    private SolvingAssistant solving_assistant;
     private GridLayout sudoku_view;
     private Button hint_button;
     private int board_size;
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initialize_members() {
         problem = new SudokuProblem(order);
-        assistant = new SolvingAssistant(problem);
+        solving_assistant = new SolvingAssistant(problem);
         sudoku_view = findViewById(R.id.number_grid);
         board_size = ((SudokuState)problem.getCurrentState()).getTiles().length;
         block_size = (int)Math.sqrt(board_size);
@@ -245,7 +245,6 @@ public class MainActivity extends AppCompatActivity {
     private void highlight_on_click() {
         white_out_board();
         highlight_num_row_col_block();
-        highlight_num_row_col_block();
         highlight_all_of_num();
 
     }
@@ -376,7 +375,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void reset_board() {
         problem = new SudokuProblem(order);
-        assistant = new SolvingAssistant(problem);
+        solving_assistant = new SolvingAssistant(problem);
         hints.clear();
         white_out_board();
         configure_hint_button();
@@ -386,13 +385,14 @@ public class MainActivity extends AppCompatActivity {
     private void do_move(int num, int row, int col) {
         if(!problem.success()) {
             String move = "Place " + num + " at " + row + " " + col;
-            assistant.tryMove(move);
-            if (assistant.isMoveLegal()) {
+            solving_assistant.tryMove(move);
+            if (solving_assistant.isMoveLegal()) {
                 update_board();
-            } else {
+            }
+            else {
                 Toast.makeText(this, "Illegal move.", Toast.LENGTH_SHORT).show();
             }
-            if (assistant.isProblemSolved()) {
+            if (solving_assistant.isProblemSolved()) {
                 Toast.makeText(this, "Puzzle solved!", Toast.LENGTH_SHORT).show();
             }
         }
