@@ -219,9 +219,9 @@ public class MainActivity extends AppCompatActivity {
         sudoku_view.setColumnCount(board_size);
         for(int i = 0; i < board_size * board_size; i++) {
             SquareTextView gridButton = make_board_button(this, i / board_size, i % board_size);
-            int width = sudoku_view.getWidth() / board_size;
-            gridButton.setWidth(width);
-            gridButton.setHeight(width);
+//            int width = sudoku_view.getWidth() / board_size;
+//            gridButton.setWidth(width);
+//            gridButton.setHeight(width);
             sudoku_view.addView(gridButton);
             button_grid[i / board_size][i % board_size] = gridButton;
         }
@@ -241,8 +241,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void set_board_button_margins(SquareTextView board_button, int i, int j) {
-        GridLayout.LayoutParams p = new GridLayout.LayoutParams();
-        p.setGravity(Gravity.CENTER_VERTICAL);
+//        GridLayout.LayoutParams p = new GridLayout.LayoutParams();
+        GridLayout.LayoutParams p = new GridLayout.LayoutParams(GridLayout.spec(GridLayout.UNDEFINED, GridLayout.FILL, 1f),      GridLayout.spec(GridLayout.UNDEFINED, GridLayout.FILL, 1f));
+//        p.setGravity(Gravity.CENTER_VERTICAL);
+//        p.width = 0;
+//        p.height = 0;
         int end = board_size - 1;
         p.setMargins(1, 1, 1, 1);
         if (i % block_size == block_size - 1 && i != end) {
@@ -456,6 +459,34 @@ public class MainActivity extends AppCompatActivity {
             setMeasuredDimension(size, size); // make it square
         }
     }
+
+    private static class SquareGridLayout extends androidx.gridlayout.widget.GridLayout {
+
+        public SquareGridLayout(Context context) {
+            super(context);
+        }
+
+        public SquareGridLayout(Context context, AttributeSet attrs) {
+            super(context, attrs);
+        }
+
+        public SquareGridLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+            super(context, attrs, defStyleAttr);
+        }
+////
+//        public SquareButton(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+//            super(context, attrs, defStyleAttr, defStyleRes);
+//        }
+
+        @Override
+        public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            super.onMeasure(widthMeasureSpec, widthMeasureSpec);
+            int width = MeasureSpec.getSize(widthMeasureSpec);
+            int height = MeasureSpec.getSize(heightMeasureSpec);
+            int size = Math.min(width, height);
+            setMeasuredDimension(size, size); // make it square
+        }
+    };
 
     public static class TableData{
         public final int RowIndex;
