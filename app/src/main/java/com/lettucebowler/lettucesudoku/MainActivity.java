@@ -93,8 +93,16 @@ public class MainActivity extends AppCompatActivity {
         color_hint_text = getColor(R.color.colorHintText);
     }
 
+    private int[][] get_initial_board() {
+        return ((SudokuState) problem.getInitialState()).getTiles();
+    }
+
     private int[][] get_current_board() {
         return ((SudokuState) problem.getCurrentState()).getTiles();
+    }
+
+    private int[][] get_final_board() {
+        return ((SudokuState) problem.getFinalState()).getTiles();
     }
 
     private void configure_touchables() {
@@ -269,7 +277,7 @@ public class MainActivity extends AppCompatActivity {
         for(int i = 0; i < board_size; i++) {
             for(int j = 0; j < board_size; j++) {
                 int cur_cell = current_board[i][j];
-                if(cur_cell == cell_num && cur_cell != 0) {
+                if(cur_cell == cell_num && cell_num != 0) {
                     if (final_board[i][j] == cell_num) {
                         button_grid[i][j].setBackgroundColor(color_correct_bg_dark);
                     }
@@ -283,6 +291,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void highlight_num_row_col_block() {
+        current_board = get_current_board();
         // Highlight cells in came row or column
         for(int i = 0; i < board_size; i++) {
             button_grid[selected_row][i].setBackgroundColor(color_correct_bg_light);
@@ -369,6 +378,8 @@ public class MainActivity extends AppCompatActivity {
     private void reset_board() {
         problem = new SudokuProblem(order);
         solving_assistant = new SolvingAssistant(problem);
+        initial_board = get_initial_board();
+        final_board = get_final_board();
         hints_given.clear();
         white_out_board();
         configure_hint_button();

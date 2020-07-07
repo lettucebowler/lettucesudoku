@@ -241,7 +241,7 @@ public class Sudoku {
                  num_removed++;
              }
              iterations++;
-        } while (num_removed < max_remove);
+        } while (num_removed < max_remove && valid_positions.size() > 0);
         System.out.println(String.format(Locale.US, "Prep iterations: %d", iterations));
 
         this.board_emptied = new int[this.board_size][this.board_size];
@@ -373,6 +373,7 @@ public class Sudoku {
 
     public static int get_random(int max) {
         Random random = new Random();
-        return random.nextInt(max);
+        System.out.println(String.format("max: %d", max));
+        return Math.abs(random.nextInt(max));
     }
 }
