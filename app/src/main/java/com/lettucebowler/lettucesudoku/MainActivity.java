@@ -1,15 +1,11 @@
 package com.lettucebowler.lettucesudoku;
 
 import android.content.Context;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.GridView;
-import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.Toast;
@@ -24,8 +20,6 @@ import com.lettucebowler.lettucesudoku.framework.problem.SolvingAssistant;
 
 import java.util.ArrayList;
 import java.util.Locale;
-
-import static androidx.gridlayout.widget.GridLayout.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
     private int color_hint_text;
     private boolean cell_has_been_selected;
     private ArrayList<int[]> hints;
-    private GridLayout move_grid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,23 +57,12 @@ public class MainActivity extends AppCompatActivity {
         }
         initialize_members();
         configure_touchables();
-        ViewTreeObserver vto = move_grid.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {@Override public void onGlobalLayout()
-        {
-
-            GridLayout gl = (GridLayout) findViewById(R.id.move_grid);
-            fillview(gl);
-
-            ViewTreeObserver obs = gl.getViewTreeObserver();
-//            obs.removeGlobalOnLayoutListener(this);
-        }});
     }
 
     private void initialize_members() {
         problem = new SudokuProblem(order);
         assistant = new SolvingAssistant(problem);
         sudoku_view = findViewById(R.id.number_grid);
-        move_grid = findViewById(R.id.move_grid);
         board_size = ((SudokuState)problem.getCurrentState()).getTiles().length;
         block_size = (int)Math.sqrt(board_size);
         hints = new ArrayList<>();
@@ -115,21 +97,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private SquareTextView make_remove_button() {
-        SquareTextView remove_button = new SquareTextView(this);
-        int width = move_grid.getWidth() / 5;
+    private SquareButton make_remove_button(int rows, int cols) {
+        SquareButton remove_button = new SquareButton(this);
         remove_button.setText("X");
-        remove_button.setBackgroundColor(board_bg);
-        remove_button.setWidth(width * 2);
-        remove_button.setHeight(width * 2);
-        remove_button.setHeight(30);
-        remove_button.setWidth(30);
-        remove_button.setTextSize(32);
-        remove_button.setIncludeFontPadding(false);
-        remove_button.setGravity(Gravity.CENTER);
-        GridLayout.LayoutParams p = new GridLayout.LayoutParams();
-        p.setGravity(Gravity.CENTER);
-        remove_button.setLayoutParams(p);
+        TableData remove_data = new TableData(rows - 1, cols - 1);
+        remove_button.setTag(remove_data);
         remove_button.setOnClickListener(e -> {
             if (cell_has_been_selected) {
                 if (!problem.is_initial_hint(selected_row, selected_col)) {
@@ -141,73 +113,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void create_move_buttons() {
-//        TableLayout move_buttons = findViewById(R.id.move_buttons);
-//        int row_length = 5;
-//        int num_rows = (board_size + 1) / row_length;
-//        for (int i = 0; i <  num_rows; i++) {
-//            TableRow move_row = new TableRow(this);
-//            TableLayout.LayoutParams l = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.MATCH_PARENT);
-//            l.weight = 1;
-//            TableRow.LayoutParams p = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
-//            p.weight = 1;
-//            move_row.setLayoutParams(l);
-//            int j;
-//            for (j = 0; i * row_length + j + 1 <= board_size && j + 1 <= row_length; j++) {
-//                SquareButton move_button = set_move_button_action(this, i * row_length + j + 1);
-//                move_button.setLayoutParams(p);
-//                TableData move_location = new TableData(i, j);
-//
-//                move_button.setTag(move_location);
-////                move_button.setBackgroundColor(board_bg);
-//                move_row.addView(move_button);
-//            }
-//            move_row.setGravity(Gravity.CENTER);
-//            if (i * row_length + j + 1 == num_rows * row_length) {
-//                SquareButton remove_button = make_remove_button(num_rows, row_length);
-//                remove_button.setLayoutParams(p);
-//                move_row.addView(remove_button);
-//            }
-//            move_buttons.addView(move_row);
-//        }
-//        style_move_buttons(num_rows, row_length);
-        int move_row_length = 5;
-        move_grid.setColumnCount(move_row_length);
-        int width = sudoku_view.getWidth() / move_row_length;
-        for(int i = 1; i <= board_size; i++) {
-            SquareTextView move_button = make_move_button(this, i);
-            move_button.setBackgroundColor(board_bg);
-            move_button.setWidth(width * 2);
-            move_button.setHeight(width * 2);
-            move_button.setHeight(30);
-            move_button.setWidth(30);
-            move_button.setTextSize(32);
-            move_button.setIncludeFontPadding(false);
-            move_button.setGravity(Gravity.CENTER);
-            GridLayout.LayoutParams p = new GridLayout.LayoutParams();
-            p.setGravity(Gravity.CENTER);
-            move_button.setLayoutParams(p);
-            move_grid.addView(move_button);
-        }
-        move_grid.addView(make_remove_button());
-//        fillview(move_grid);
+        TableLayout move_buttons = findViewById(R.id.move_buttons);
+        int row_length = 5;
+        int num_rows = (board_size + 1) / row_length;
+        for (int i = 0; i <  num_rows; i++) {
+            TableRow move_row = new TableRow(this);
+            TableLayout.LayoutParams l = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.MATCH_PARENT);
+            l.weight = 1;
+            TableRow.LayoutParams p = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
+            p.weight = 1;
+            move_row.setLayoutParams(l);
+            int j;
+            for (j = 0; i * row_length + j + 1 <= board_size && j + 1 <= row_length; j++) {
+                SquareButton move_button = set_move_button_action(this, i * row_length + j + 1);
+                move_button.setLayoutParams(p);
+                TableData move_location = new TableData(i, j);
 
+                move_button.setTag(move_location);
+                move_row.addView(move_button);
+            }
+            move_row.setGravity(Gravity.CENTER);
+            if (i * row_length + j + 1 == num_rows * row_length) {
+                SquareButton remove_button = make_remove_button(num_rows, row_length);
+                remove_button.setLayoutParams(p);
+                move_row.addView(remove_button);
+            }
+            move_buttons.addView(move_row);
+        }
+        style_move_buttons(num_rows, row_length);
     }
 
-    private void fillview(GridLayout gl)
-    {
-        SquareTextView buttontemp;
-
-        //Stretch buttons
-        int idealChildWidth = (int) ((gl.getWidth()-20*gl.getColumnCount())/gl.getColumnCount());
-        for( int i=0; i< gl.getChildCount();i++)
-        {
-            buttontemp = (SquareTextView) gl.getChildAt(i);
-            buttontemp.setWidth(idealChildWidth);
-        }
-    }
-
-    private SquareTextView make_move_button (Context context, int i) {
-        SquareTextView move_button = new SquareTextView(context);
+    private SquareButton set_move_button_action(Context context, int i) {
+        SquareButton move_button = new SquareButton(context);
         move_button.setText(String.format(Locale.US, "%d", i));
         move_button.setOnClickListener(e -> {
             if (cell_has_been_selected) {
@@ -220,19 +157,19 @@ public class MainActivity extends AppCompatActivity {
         return move_button;
     }
 
-//    private void style_move_buttons(int rows, int cols) {
-//        TableLayout move_buttons = findViewById(R.id.move_buttons);
-//        ArrayList<View> moves = move_buttons.getTouchables();
-//        for (View view : moves) {
-//            TableRow.LayoutParams p = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
-//            p.weight = 1;
-//            view.setLayoutParams(p);
-//            ((SquareButton) view).setGravity(Gravity.CENTER);
-//            ((SquareButton) view).setTextSize(20);
-//            ((SquareButton) view).setTextColor(color_default_text);
-//            ((SquareButton) view).setIncludeFontPadding(false);
-//        }
-//    }
+    private void style_move_buttons(int rows, int cols) {
+        TableLayout move_buttons = findViewById(R.id.move_buttons);
+        ArrayList<View> moves = move_buttons.getTouchables();
+        for (View view : moves) {
+            TableRow.LayoutParams p = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
+            p.weight = 1;
+            view.setLayoutParams(p);
+            ((SquareButton) view).setGravity(Gravity.CENTER);
+            ((SquareButton) view).setTextSize(20);
+            ((SquareButton) view).setTextColor(color_default_text);
+            ((SquareButton) view).setIncludeFontPadding(false);
+        }
+    }
 
     private void configure_reset_button() {
         Button reset_button = (Button) findViewById(R.id.button_reset);
@@ -285,10 +222,10 @@ public class MainActivity extends AppCompatActivity {
         sudoku_view.setColumnCount(board_size);
         for(int i = 0; i < board_size * board_size; i++) {
             SquareTextView gridButton = make_board_button(this, i / board_size, i % board_size);
+            sudoku_view.addView(gridButton);
             int width = sudoku_view.getWidth() / board_size;
             gridButton.setWidth(width);
             gridButton.setHeight(width);
-            sudoku_view.addView(gridButton);
 
         }
         white_out_board();
@@ -309,7 +246,6 @@ public class MainActivity extends AppCompatActivity {
     private void set_board_button_margins(SquareTextView board_button, int i, int j) {
         GridLayout.LayoutParams p = new GridLayout.LayoutParams();
         p.setGravity(Gravity.CENTER_VERTICAL);
-        int start = 0;
         int end = board_size - 1;
         p.setMargins(1, 1, 1, 1);
         if (i % block_size == block_size - 1 && i != end) {
@@ -334,24 +270,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void highlight_on_click() {
         white_out_board();
-//        highlight_correct();
         highlight_num_row_col_block();
         highlight_num_row_col_block();
         highlight_all_of_num();
 
     }
-
-//    private void highlight_correct() {
-//        ArrayList<View> layoutButtons = sudoku_view.getTouchables();
-//        for (View view : layoutButtons) {
-//            TableData position = (TableData) view.getTag();
-//            int pos_row = position.RowIndex;
-//            int pos_col = position.ColumnIndex;
-//            if(problem.is_row_complete(pos_row) || problem.is_column_complete(pos_col) || problem.is_block_complete(pos_row, pos_col)) {
-//                ((SquareTextView) view).setBackgroundColor(success_bg_light);
-//            }
-//        }
-//    }
 
     private void highlight_all_of_num() {
         ArrayList<View> layoutButtons = sudoku_view.getTouchables();
