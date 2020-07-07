@@ -43,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
     private int color_correct_text;
     private int color_incorrect_text;
     private int color_hint_text;
+    private int[][] initial_board;
+    private int[][] current_board;
+    private int[][] final_board;
     private boolean cell_has_been_selected;
     private ArrayList<int[]> hints_given;
     private SquareTextView[][] button_grid;
@@ -69,6 +72,9 @@ public class MainActivity extends AppCompatActivity {
         hints_given = new ArrayList<>();
         cell_has_been_selected = false;
         button_grid = new SquareTextView[board_size][board_size];
+        initial_board = ((SudokuState) problem.getInitialState()).getTiles();
+        current_board = get_current_board();
+        final_board = ((SudokuState) problem.getFinalState()).getTiles();
 
         // highlight colors
         color_correct_bg_light = getColor(R.color.colorCorrectBGLight);
@@ -85,6 +91,10 @@ public class MainActivity extends AppCompatActivity {
         color_incorrect_text = getColor(R.color.colorIncorrectText);
         color_correct_text = getColor(R.color.colorCorrectText);
         color_hint_text = getColor(R.color.colorHintText);
+    }
+
+    private int[][] get_current_board() {
+        return ((SudokuState) problem.getCurrentState()).getTiles();
     }
 
     private void configure_touchables() {
@@ -122,12 +132,12 @@ public class MainActivity extends AppCompatActivity {
     private SquareButton create_move_button(Context context, int i)  {
         SquareButton move_button = new SquareButton(context);
         set_move_button_action(move_button, i);
-        style_move_button(move_button);
+        style_move_button(move_button, i);
         return move_button;
     }
 
     private void set_move_button_action(SquareButton move_button, int i) {
-        move_button.setText(String.format(Locale.US, "%d", i));
+//        move_button.setText(String.format(Locale.US, "%d", i));
         move_button.setOnClickListener(e -> {
             if (cell_has_been_selected) {
                 int[][] initial_board = ((SudokuState) problem.getInitialState()).getTiles();
@@ -138,14 +148,16 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void style_move_button(SquareButton move_button) {
+    private void style_move_button(SquareButton move_button, int i) {
         TableRow.LayoutParams p = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
         p.weight = 1;
         move_button.setLayoutParams(p);
         move_button.setGravity(Gravity.CENTER);
-        move_button.setTextSize(20);
+        move_button.setTextSize(32);
         move_button.setTextColor(color_default_text);
         move_button.setIncludeFontPadding(false);
+        String buttonText = (i == 0) ? "X" : String.format(Locale.US, "%d", i);
+        move_button.setText(buttonText);
     }
 
     private void configure_reset_button() {
