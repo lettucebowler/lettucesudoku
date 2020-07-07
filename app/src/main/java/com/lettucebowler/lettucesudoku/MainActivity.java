@@ -137,10 +137,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void set_move_button_action(SquareButton move_button, int i) {
-//        move_button.setText(String.format(Locale.US, "%d", i));
         move_button.setOnClickListener(e -> {
             if (cell_has_been_selected) {
-                int[][] initial_board = ((SudokuState) problem.getInitialState()).getTiles();
                 if (initial_board[selected_row][selected_col] == 0) {
                     do_move(i, selected_row, selected_col);
                 }
@@ -153,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
         p.weight = 1;
         move_button.setLayoutParams(p);
         move_button.setGravity(Gravity.CENTER);
-        move_button.setTextSize(32);
+        move_button.setTextSize(28);
         move_button.setTextColor(color_default_text);
         move_button.setIncludeFontPadding(false);
         String buttonText = (i == 0) ? "X" : String.format(Locale.US, "%d", i);
@@ -184,8 +182,7 @@ public class MainActivity extends AppCompatActivity {
     private void give_hint() {
         // Only run if problem is not yet solved
         if (!problem.success()) {
-            int[][] final_board = ((SudokuState) problem.getFinalState()).getTiles();
-            int[][] current_board = ((SudokuState) problem.getCurrentState()).getTiles();
+            current_board = get_current_board();
             int i;
             int j;
             int move_num;
@@ -267,8 +264,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void highlight_all_of_num() {
-        int[][] current_board = ((SudokuState) problem.getCurrentState()).getTiles();
-        int[][] final_board = ((SudokuState) problem.getFinalState()).getTiles();
+        current_board = get_current_board();
         int cell_num = current_board[selected_row][selected_col];
         for(int i = 0; i < board_size; i++) {
             for(int j = 0; j < board_size; j++) {
@@ -304,8 +300,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void update_cell(int row, int col) {
-        int[][] current_tiles = ((SudokuState) problem.getCurrentState()).getTiles();
-        int to_place = current_tiles[row][col];
+        current_board = get_current_board();
+        int to_place = current_board[row][col];
         String buttonText = (to_place == 0) ? "" : String.format(Locale.US, "%d", to_place);
         SquareTextView grid_cell = button_grid[row][col];
         grid_cell.setText(String.format(buttonText));
@@ -343,11 +339,10 @@ public class MainActivity extends AppCompatActivity {
     // Call to reset board for new game
     private void populate_board() {
         cell_has_been_selected = false;
-        int[][] initial_tiles = ((SudokuState) problem.getInitialState()).getTiles();
         ArrayList<View> layoutButtons = sudoku_view.getTouchables();
         for (View view : layoutButtons) {
             TableData pos = (TableData) view.getTag();
-            int to_place = initial_tiles[pos.RowIndex][pos.ColumnIndex];
+            int to_place = initial_board[pos.RowIndex][pos.ColumnIndex];
             String buttonText = (to_place == 0) ? "" : String.format(Locale.US, "%d", to_place);
             ((SquareTextView) view).setText(buttonText);
             ((SquareTextView) view).setTextColor(color_default_text);
