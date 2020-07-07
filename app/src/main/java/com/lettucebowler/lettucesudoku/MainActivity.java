@@ -94,22 +94,6 @@ public class MainActivity extends AppCompatActivity {
     private void configure_game_buttons() {
         configure_reset_button();
         configure_hint_button();
-
-    }
-
-    private SquareButton make_remove_button(int rows, int cols) {
-        SquareButton remove_button = new SquareButton(this);
-        remove_button.setText("X");
-        TableData remove_data = new TableData(rows - 1, cols - 1);
-        remove_button.setTag(remove_data);
-        remove_button.setOnClickListener(e -> {
-            if (cell_has_been_selected) {
-                if (!problem.is_initial_hint(selected_row, selected_col)) {
-                    do_move(0, selected_row, selected_col);
-                }
-            }
-        });
-        return remove_button;
     }
 
     private void create_move_buttons() {
@@ -120,31 +104,23 @@ public class MainActivity extends AppCompatActivity {
             TableRow move_row = new TableRow(this);
             TableLayout.LayoutParams l = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.MATCH_PARENT);
             l.weight = 1;
-            TableRow.LayoutParams p = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
-            p.weight = 1;
             move_row.setLayoutParams(l);
-            int j;
-            for (j = 0; i * row_length + j + 1 <= board_size && j + 1 <= row_length; j++) {
-                SquareButton move_button = set_move_button_action(this, i * row_length + j + 1);
-                move_button.setLayoutParams(p);
-                TableData move_location = new TableData(i, j);
-
-                move_button.setTag(move_location);
-                move_row.addView(move_button);
-            }
-            move_row.setGravity(Gravity.CENTER);
-            if (i * row_length + j + 1 == num_rows * row_length) {
-                SquareButton remove_button = make_remove_button(num_rows, row_length);
-                remove_button.setLayoutParams(p);
-                move_row.addView(remove_button);
-            }
             move_buttons.addView(move_row);
         }
-        style_move_buttons(num_rows, row_length);
+        for(int i = 1; i <= board_size + 1; i++) {
+            SquareButton move_button = create_move_button(this, i % (board_size + 1));
+            ((TableRow) move_buttons.getChildAt((i - 1) / row_length)).addView(move_button);
+        }
     }
 
-    private SquareButton set_move_button_action(Context context, int i) {
+    private SquareButton create_move_button(Context context, int i)  {
         SquareButton move_button = new SquareButton(context);
+        set_move_button_action(move_button, i);
+        style_move_button(move_button);
+        return move_button;
+    }
+
+    private void set_move_button_action(SquareButton move_button, int i) {
         move_button.setText(String.format(Locale.US, "%d", i));
         move_button.setOnClickListener(e -> {
             if (cell_has_been_selected) {
@@ -154,21 +130,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        return move_button;
     }
 
-    private void style_move_buttons(int rows, int cols) {
-        TableLayout move_buttons = findViewById(R.id.move_buttons);
-        ArrayList<View> moves = move_buttons.getTouchables();
-        for (View view : moves) {
-            TableRow.LayoutParams p = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
-            p.weight = 1;
-            view.setLayoutParams(p);
-            ((SquareButton) view).setGravity(Gravity.CENTER);
-            ((SquareButton) view).setTextSize(20);
-            ((SquareButton) view).setTextColor(color_default_text);
-            ((SquareButton) view).setIncludeFontPadding(false);
-        }
+    private void style_move_button(SquareButton move_button) {
+        TableRow.LayoutParams p = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
+        p.weight = 1;
+        move_button.setLayoutParams(p);
+        move_button.setGravity(Gravity.CENTER);
+        move_button.setTextSize(20);
+        move_button.setTextColor(color_default_text);
+        move_button.setIncludeFontPadding(false);
     }
 
     private void configure_reset_button() {
