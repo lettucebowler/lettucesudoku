@@ -278,27 +278,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void highlight_num_row_col_block() {
-        ArrayList<View> layoutButtons = sudoku_view.getTouchables();
-        for (View view : layoutButtons) {
-            TableData position = (TableData) view.getTag();
-            int pos_row = position.RowIndex;
-            int pos_col = position.ColumnIndex;
-            boolean same_row_block = pos_row / block_size == selected_row / block_size;
-            boolean same_col_block = pos_col / block_size == selected_col / block_size;
-            boolean same_row = pos_row == selected_row;
-            boolean same_col = pos_col == selected_col;
+        // Highlight cells in came row or column
+        for(int i = 0; i < board_size; i++) {
+            button_grid[selected_row][i].setBackgroundColor(color_correct_bg_light);
+            button_grid[i][selected_col].setBackgroundColor(color_correct_bg_light);
+        }
 
-            // highlight if same row or col
-            if (same_row || same_col) {
-                view.setBackgroundColor(color_correct_bg_light);
-            }
-            // highlight if same block
-            else if (same_col_block && same_row_block) {
-                view.setBackgroundColor(color_correct_bg_light);
-            }
-            // undo highlight of selected cell
-            if (same_row && same_col) {
-                view.setBackgroundColor(board_bg);
+        // Highlight cells in same block
+        int start_row = selected_row / block_size * block_size;
+        int start_col = selected_col / block_size * block_size;
+        for(int i = 0; i < block_size; i++) {
+            for(int j = 0; j < block_size; j++) {
+                button_grid[start_row + i][start_col + j].setBackgroundColor(color_correct_bg_light);
             }
         }
     }
