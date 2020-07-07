@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private int color_hint_text;
     private boolean cell_has_been_selected;
     private ArrayList<int[]> hints_given;
+    private SquareTextView[][] button_grid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         block_size = (int)Math.sqrt(board_size);
         hints_given = new ArrayList<>();
         cell_has_been_selected = false;
+        button_grid = new SquareTextView[board_size][board_size];
 
         // highlight colors
         color_correct_bg_light = getColor(R.color.colorCorrectBGLight);
@@ -157,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void configure_hint_button() {
-        hint_button = (Button) findViewById(R.id.button_hint);
+        hint_button = findViewById(R.id.button_hint);
         hint_button.setTag(5);
         String hint_text = String.format(Locale.US, "hint(%d)", (int) hint_button.getTag());
         hint_button.setText(hint_text);
@@ -189,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
             }
             final String finalHint_text = String.format(Locale.US, "hint(%d)", (int)hint_button.getTag());
             hint_button.setText(finalHint_text);
-            update_board();
+            update_cell(i, j);
         }
         else {
             Toast.makeText(this, "Puzzle already solved!", Toast.LENGTH_SHORT).show();
@@ -200,13 +202,14 @@ public class MainActivity extends AppCompatActivity {
         sudoku_view.setColumnCount(board_size);
         for(int i = 0; i < board_size * board_size; i++) {
             SquareTextView gridButton = make_board_button(this, i / board_size, i % board_size);
-            sudoku_view.addView(gridButton);
             int width = sudoku_view.getWidth() / board_size;
             gridButton.setWidth(width);
             gridButton.setHeight(width);
+            sudoku_view.addView(gridButton);
+            button_grid[i / board_size][i % board_size] = gridButton;
         }
         white_out_board();
-        update_board();
+        populate_board();
     }
 
     private SquareTextView make_board_button(Context context, int i, int j) {
@@ -300,22 +303,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void update_board() {
+    private void update_cell(int row, int col) {
         int[][] current_tiles = ((SudokuState) problem.getCurrentState()).getTiles();
+        int to_place = current_tiles[row][col];
+        String buttonText = (to_place == 0) ? "" : String.format(Locale.US, "%d", to_place);
+        SquareTextView grid_cell = button_grid[row][col];
+        grid_cell.setText(String.format(buttonText));
+        set_board_text_color(grid_cell, row, col);
 
-        if (cell_has_been_selected) {
-            highlight_on_click();
-        }
-        ArrayList<View> layoutButtons = sudoku_view.getTouchables();
-        for (View view : layoutButtons) {
-            TableData pos = (TableData) view.getTag();
-            int to_place = current_tiles[pos.RowIndex][pos.ColumnIndex];
-            String buttonText = (to_place == 0) ? "" : String.format(Locale.US, "%d", to_place);
-            ((SquareTextView) view).setText(buttonText);
-            int row = ((TableData) view.getTag()).RowIndex;
-            int col = ((TableData) view.getTag()).ColumnIndex;
-            set_board_text_color((SquareTextView) view, row, col);
-        }
         if (problem.success()) {
             highlight_on_success();
             hint_button.setEnabled(false);
@@ -389,7 +384,8 @@ public class MainActivity extends AppCompatActivity {
             String move = "Place " + num + " at " + row + " " + col;
             solving_assistant.tryMove(move);
             if (solving_assistant.isMoveLegal()) {
-                update_board();
+//                update_board();
+                update_cell(row, col);
             }
             else {
                 Toast.makeText(this, "Illegal move.", Toast.LENGTH_SHORT).show();
@@ -452,7 +448,6 @@ public class MainActivity extends AppCompatActivity {
             int height = MeasureSpec.getSize(heightMeasureSpec);
             int size = Math.min(width, height);
             setMeasuredDimension(size, size); // make it square
-
         }
     }
 
