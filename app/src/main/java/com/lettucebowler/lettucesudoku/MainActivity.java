@@ -313,23 +313,26 @@ public class MainActivity extends AppCompatActivity {
             ((SquareTextView) view).setText(buttonText);
             int row = ((TableData) view.getTag()).RowIndex;
             int col = ((TableData) view.getTag()).ColumnIndex;
-
-            if(problem.is_correct(row, col)) {
-                ((SquareTextView) view).setTextColor(color_correct_text);
-            }
-            else {
-                ((SquareTextView) view).setTextColor(color_incorrect_text);
-            }
-            if(problem.is_initial_hint(row, col)) {
-                ((SquareTextView) view).setTextColor(color_default_text);
-            }
-            if(given_as_hint(row, col, hints)) {
-                ((SquareTextView) view).setTextColor(color_hint_text);
-            }
+            set_board_text_color((SquareTextView) view, row, col);
         }
         if (problem.success()) {
             highlight_on_success();
             hint_button.setEnabled(false);
+        }
+    }
+
+    private void set_board_text_color(SquareTextView view, int row, int col) {
+        if(problem.is_correct(row, col)) {
+            view.setTextColor(color_correct_text);
+        }
+        else {
+            view.setTextColor(color_incorrect_text);
+        }
+        if(problem.is_initial_hint(row, col)) {
+            view.setTextColor(color_default_text);
+        }
+        if(given_as_hint(row, col, hints)) {
+            view.setTextColor(color_hint_text);
         }
     }
 
