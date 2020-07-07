@@ -11,6 +11,7 @@ import android.widget.TableRow;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.gridlayout.widget.GridLayout;
 
 import com.lettucebowler.lettucesudoku.domains.sudoku.Sudoku;
@@ -123,7 +124,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Add empty rows to the table
         for (int i = 0; i <  num_rows; i++) {
-            TableRow move_row = new TableRow(this);
+            int buttonStyle = R.style.Borderless_Button;
+            TableRow move_row = new TableRow(new ContextThemeWrapper(this, buttonStyle));
+
             TableLayout.LayoutParams l = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.MATCH_PARENT);
             l.weight = 1;
             move_row.setLayoutParams(l);
@@ -138,7 +141,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private SquareButton create_move_button(Context context, int i)  {
-        SquareButton move_button = new SquareButton(context);
+        int buttonStyle = R.style.Borderless_Button;
+        SquareButton move_button = new SquareButton(new ContextThemeWrapper(this, buttonStyle), null, buttonStyle);
         set_move_button_action(move_button, i);
         style_move_button(move_button, i);
         return move_button;

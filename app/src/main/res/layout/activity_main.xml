@@ -17,8 +17,8 @@
         app:layout_constraintBottom_toTopOf="@+id/game_buttons"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent">
-    </TableLayout>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sudoku_grid"></TableLayout>
 
     <TableRow
         android:id="@+id/game_buttons"
