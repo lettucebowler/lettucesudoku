@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -58,6 +59,16 @@ public class MainActivity extends AppCompatActivity {
         }
         initialize_members();
         configure_touchables();
+        ViewTreeObserver vto = move_grid.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {@Override public void onGlobalLayout()
+        {
+
+            GridLayout gl = (GridLayout) findViewById(R.id.move_grid);
+            fillview(gl);
+
+            ViewTreeObserver obs = gl.getViewTreeObserver();
+//            obs.removeGlobalOnLayoutListener(this);
+        }});
     }
 
     private void initialize_members() {
@@ -104,13 +115,15 @@ public class MainActivity extends AppCompatActivity {
         int width = move_grid.getWidth() / 5;
         remove_button.setText("X");
         remove_button.setBackgroundColor(board_bg);
-        remove_button.setWidth(width);
-        remove_button.setHeight(width);
+        remove_button.setWidth(width * 2);
+        remove_button.setHeight(width * 2);
+        remove_button.setHeight(30);
+        remove_button.setWidth(30);
         remove_button.setTextSize(32);
         remove_button.setIncludeFontPadding(false);
         remove_button.setGravity(Gravity.CENTER);
         GridLayout.LayoutParams p = new GridLayout.LayoutParams();
-        p.setGravity(Gravity.CENTER_VERTICAL);
+        p.setGravity(Gravity.CENTER);
         remove_button.setLayoutParams(p);
         remove_button.setOnClickListener(e -> {
             if (cell_has_been_selected) {
@@ -160,15 +173,32 @@ public class MainActivity extends AppCompatActivity {
             move_button.setBackgroundColor(board_bg);
             move_button.setWidth(width * 2);
             move_button.setHeight(width * 2);
+            move_button.setHeight(30);
+            move_button.setWidth(30);
             move_button.setTextSize(32);
             move_button.setIncludeFontPadding(false);
             move_button.setGravity(Gravity.CENTER);
             GridLayout.LayoutParams p = new GridLayout.LayoutParams();
-            p.setGravity(Gravity.CENTER_VERTICAL);
+            p.setGravity(Gravity.CENTER);
             move_button.setLayoutParams(p);
             move_grid.addView(move_button);
         }
         move_grid.addView(make_remove_button());
+//        fillview(move_grid);
+
+    }
+
+    private void fillview(GridLayout gl)
+    {
+        SquareTextView buttontemp;
+
+        //Stretch buttons
+        int idealChildWidth = (int) ((gl.getWidth()-20*gl.getColumnCount())/gl.getColumnCount());
+        for( int i=0; i< gl.getChildCount();i++)
+        {
+            buttontemp = (SquareTextView) gl.getChildAt(i);
+            buttontemp.setWidth(idealChildWidth);
+        }
     }
 
     private SquareTextView make_move_button (Context context, int i) {
