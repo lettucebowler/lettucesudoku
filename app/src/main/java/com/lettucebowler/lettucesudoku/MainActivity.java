@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void configure_reset_button() {
-        Button reset_button = (Button) findViewById(R.id.button_reset);
+        Button reset_button = findViewById(R.id.button_reset);
         reset_button.setOnClickListener(View -> {
             problem = new SudokuProblem(order);
             reset_button.setEnabled(false);
@@ -384,7 +384,6 @@ public class MainActivity extends AppCompatActivity {
             String move = "Place " + num + " at " + row + " " + col;
             solving_assistant.tryMove(move);
             if (solving_assistant.isMoveLegal()) {
-//                update_board();
                 update_cell(row, col);
             }
             else {
