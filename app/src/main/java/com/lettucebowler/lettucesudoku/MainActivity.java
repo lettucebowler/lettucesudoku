@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private int color_incorrect_text;
     private int color_hint_text;
     private boolean cell_has_been_selected;
-    private ArrayList<int[]> hints;
+    private ArrayList<int[]> hints_given;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         sudoku_view = findViewById(R.id.number_grid);
         board_size = ((SudokuState)problem.getCurrentState()).getTiles().length;
         block_size = (int)Math.sqrt(board_size);
-        hints = new ArrayList<>();
+        hints_given = new ArrayList<>();
         cell_has_been_selected = false;
 
         // highlight colors
@@ -163,34 +163,37 @@ public class MainActivity extends AppCompatActivity {
         hint_button.setText(hint_text);
         hint_button.setEnabled(true);
         hint_button.setOnClickListener(e -> {
-            // Only run if problem is not yet solved
-            if (!problem.success()) {
-                int[][] final_board = ((SudokuState) problem.getFinalState()).getTiles();
-                int[][] current_board = ((SudokuState) problem.getCurrentState()).getTiles();
-                int i;
-                int j;
-                int move_num;
-                do {
-                    i = Sudoku.get_random(final_board.length);
-                    j = Sudoku.get_random(final_board.length);
-                    move_num = final_board[i][j];
-                } while (current_board[i][j] != 0);
-                do_move(move_num, i, j);
-                int[] hint = {i, j};
-                hints.add(hint);
-                hint_button.setTag(((int) hint_button.getTag()) - 1);
-                if ((int) hint_button.getTag() == 0) {
-                    hint_button.setEnabled(false);
-                }
-                final String finalHint_text = String.format(Locale.US, "hint(%d)", (int)hint_button.getTag());
-                hint_button.setText(finalHint_text);
-                update_board();
-            }
-            else {
-                Toast.makeText(this, "Puzzle already solved!", Toast.LENGTH_SHORT).show();
-            }
-
+            give_hint();
         });
+    }
+
+    private void give_hint() {
+        // Only run if problem is not yet solved
+        if (!problem.success()) {
+            int[][] final_board = ((SudokuState) problem.getFinalState()).getTiles();
+            int[][] current_board = ((SudokuState) problem.getCurrentState()).getTiles();
+            int i;
+            int j;
+            int move_num;
+            do {
+                i = Sudoku.get_random(final_board.length);
+                j = Sudoku.get_random(final_board.length);
+                move_num = final_board[i][j];
+            } while (current_board[i][j] != 0);
+            do_move(move_num, i, j);
+            int[] hint = {i, j};
+            hints_given.add(hint);
+            hint_button.setTag(((int) hint_button.getTag()) - 1);
+            if ((int) hint_button.getTag() == 0) {
+                hint_button.setEnabled(false);
+            }
+            final String finalHint_text = String.format(Locale.US, "hint(%d)", (int)hint_button.getTag());
+            hint_button.setText(finalHint_text);
+            update_board();
+        }
+        else {
+            Toast.makeText(this, "Puzzle already solved!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void initialize_board() {
@@ -246,7 +249,6 @@ public class MainActivity extends AppCompatActivity {
         white_out_board();
         highlight_num_row_col_block();
         highlight_all_of_num();
-
     }
 
     private void highlight_all_of_num() {
@@ -330,7 +332,7 @@ public class MainActivity extends AppCompatActivity {
         if(problem.is_initial_hint(row, col)) {
             view.setTextColor(color_default_text);
         }
-        if(given_as_hint(row, col, hints)) {
+        if(given_as_hint(row, col, hints_given)) {
             view.setTextColor(color_hint_text);
         }
     }
@@ -357,8 +359,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private boolean given_as_hint(int row, int col, ArrayList<int[]> hints) {
-        for (int[] hint : hints) {
+    private boolean given_as_hint(int row, int col, ArrayList<int[]> hints_given) {
+        for (int[] hint : hints_given) {
             if (row == hint[0] && col == hint[1]) {
                 return true;
             }
@@ -376,7 +378,7 @@ public class MainActivity extends AppCompatActivity {
     private void reset_board() {
         problem = new SudokuProblem(order);
         solving_assistant = new SolvingAssistant(problem);
-        hints.clear();
+        hints_given.clear();
         white_out_board();
         configure_hint_button();
         populate_board();
