@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     private SudokuProblem problem;
     private SolvingAssistant solving_assistant;
-    private GridLayout sudoku_view;
+    private SquareGridLayout sudoku_view;
     private Button hint_button;
     private int board_size;
     private int block_size;
@@ -66,7 +66,8 @@ public class MainActivity extends AppCompatActivity {
     private void initialize_members() {
         problem = new SudokuProblem(order);
         solving_assistant = new SolvingAssistant(problem);
-        sudoku_view = findViewById(R.id.number_grid);
+//        sudoku_view = findViewById(R.id.number_grid);
+        sudoku_view = findViewById(R.id.sudoku_grid);
         board_size = ((SudokuState)problem.getCurrentState()).getTiles().length;
         block_size = (int)Math.sqrt(board_size);
         hints_given = new ArrayList<>();
@@ -417,10 +418,6 @@ public class MainActivity extends AppCompatActivity {
         public SquareTextView(Context context, AttributeSet attrs, int defStyleAttr) {
             super(context, attrs, defStyleAttr);
         }
-////
-//        public SquareTextView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-//            super(context, attrs, defStyleAttr, defStyleRes);
-//        }
 
         @Override
         public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -445,10 +442,6 @@ public class MainActivity extends AppCompatActivity {
         public SquareButton(Context context, AttributeSet attrs, int defStyleAttr) {
             super(context, attrs, defStyleAttr);
         }
-////
-//        public SquareButton(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-//            super(context, attrs, defStyleAttr, defStyleRes);
-//        }
 
         @Override
         public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -473,10 +466,6 @@ public class MainActivity extends AppCompatActivity {
         public SquareGridLayout(Context context, AttributeSet attrs, int defStyleAttr) {
             super(context, attrs, defStyleAttr);
         }
-////
-//        public SquareButton(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-//            super(context, attrs, defStyleAttr, defStyleRes);
-//        }
 
         @Override
         public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
