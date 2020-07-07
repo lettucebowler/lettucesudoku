@@ -119,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void create_move_buttons() {
         TableLayout move_buttons = findViewById(R.id.move_buttons);
+        move_buttons.setBackgroundColor(board_bg);
         int row_length = 5;
         int num_rows = (board_size + 1) / row_length;
 
@@ -141,8 +142,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private SquareButton create_move_button(Context context, int i)  {
-        int buttonStyle = R.style.Borderless_Button;
-        SquareButton move_button = new SquareButton(new ContextThemeWrapper(this, buttonStyle), null, buttonStyle);
+//        int buttonStyle = R.style.Borderless_Button;
+//        SquareButton move_button = new SquareButton(new ContextThemeWrapper(this, buttonStyle), null, buttonStyle);
+        SquareButton move_button = new SquareButton(this);
         set_move_button_action(move_button, i);
         style_move_button(move_button, i);
         return move_button;
@@ -168,6 +170,7 @@ public class MainActivity extends AppCompatActivity {
         move_button.setIncludeFontPadding(false);
         String buttonText = (i == 0) ? "X" : String.format(Locale.US, "%d", i);
         move_button.setText(buttonText);
+        move_button.setBackgroundColor(board_bg);
     }
 
     private void configure_reset_button() {
