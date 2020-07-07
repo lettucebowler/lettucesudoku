@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
     private void initialize_members() {
         problem = new SudokuProblem(order);
         solving_assistant = new SolvingAssistant(problem);
-//        sudoku_view = findViewById(R.id.number_grid);
         sudoku_view = findViewById(R.id.sudoku_grid);
         board_size = ((SudokuState)problem.getCurrentState()).getTiles().length;
         block_size = (int)Math.sqrt(board_size);
