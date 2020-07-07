@@ -100,6 +100,8 @@ public class MainActivity extends AppCompatActivity {
         TableLayout move_buttons = findViewById(R.id.move_buttons);
         int row_length = 5;
         int num_rows = (board_size + 1) / row_length;
+
+        // Add empty rows to the table
         for (int i = 0; i <  num_rows; i++) {
             TableRow move_row = new TableRow(this);
             TableLayout.LayoutParams l = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.MATCH_PARENT);
@@ -107,6 +109,8 @@ public class MainActivity extends AppCompatActivity {
             move_row.setLayoutParams(l);
             move_buttons.addView(move_row);
         }
+
+        // Create buttons and add them to the correct row in the layout
         for(int i = 1; i <= board_size + 1; i++) {
             SquareButton move_button = create_move_button(this, i % (board_size + 1));
             ((TableRow) move_buttons.getChildAt((i - 1) / row_length)).addView(move_button);
@@ -197,7 +201,6 @@ public class MainActivity extends AppCompatActivity {
             int width = sudoku_view.getWidth() / board_size;
             gridButton.setWidth(width);
             gridButton.setHeight(width);
-
         }
         white_out_board();
         update_board();
