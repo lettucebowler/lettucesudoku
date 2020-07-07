@@ -255,26 +255,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void highlight_all_of_num() {
-        ArrayList<View> layoutButtons = sudoku_view.getTouchables();
         int[][] current_board = ((SudokuState) problem.getCurrentState()).getTiles();
         int[][] final_board = ((SudokuState) problem.getFinalState()).getTiles();
         int cell_num = current_board[selected_row][selected_col];
-        for (View view : layoutButtons) {
-            TableData position = (TableData) view.getTag();
-            int cur_cell = current_board[position.RowIndex][position.ColumnIndex];
-            if ( cur_cell == cell_num && cur_cell != 0) {
-                if (final_board[position.RowIndex][position.ColumnIndex] == cur_cell) {
-                    view.setBackgroundColor(color_correct_bg_dark);
+        for(int i = 0; i < board_size; i++) {
+            for(int j = 0; j < board_size; j++) {
+                int cur_cell = current_board[i][j];
+                if(cur_cell == cell_num && cur_cell != 0) {
+                    if (final_board[i][j] == cell_num) {
+                        button_grid[i][j].setBackgroundColor(color_correct_bg_dark);
+                    }
+                    else {
+                        button_grid[i][j].setBackgroundColor(incorrect_bg_dark);
+                    }
                 }
-                else {
-                    view.setBackgroundColor(incorrect_bg_dark);
-                }
-            }
-            // undo highlight of selected cell
-            if (position.RowIndex == selected_row && position.ColumnIndex == selected_col) {
-                view.setBackgroundColor(board_bg);
             }
         }
+        button_grid[selected_row][selected_col].setBackgroundColor(board_bg);
     }
 
     private void highlight_num_row_col_block() {
@@ -301,6 +298,7 @@ public class MainActivity extends AppCompatActivity {
         SquareTextView grid_cell = button_grid[row][col];
         grid_cell.setText(String.format(buttonText));
         set_board_text_color(grid_cell, row, col);
+        highlight_on_click();
 
         if (problem.success()) {
             highlight_on_success();
