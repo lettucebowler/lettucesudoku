@@ -131,8 +131,6 @@ public class MainActivity extends AppCompatActivity {
             TableLayout.LayoutParams l = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.MATCH_PARENT);
             l.weight = 1;
             move_row.setLayoutParams(l);
-//            move_row.setDividerDrawable(new ColorDrawable(Color.BLACK));
-//            move_row.setShowDividers(TableRow.SHOW_DIVIDER_MIDDLE);
             move_buttons.addView(move_row, 0);
         }
 
@@ -362,7 +360,6 @@ public class MainActivity extends AppCompatActivity {
             String buttonText = (to_place == 0) ? "" : String.format(Locale.US, "%d", to_place);
             ((SquareTextView) view).setText(buttonText);
             ((SquareTextView) view).setTextColor(color_default_text);
-            view.setEnabled(true);
         }
     }
 
