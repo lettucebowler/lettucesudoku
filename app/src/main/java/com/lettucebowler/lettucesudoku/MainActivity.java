@@ -117,50 +117,59 @@ public class MainActivity extends AppCompatActivity {
         configure_hint_button();
     }
 
+//    private void create_move_buttons() {
+////        TableLayout buttons = findViewById(R.id.button_layout);
+////        int row_length = ((TableRow) buttons.getChildAt(0)).getChildCount();
+////        for(int i = 1; i <= board_size + 1; i++) {
+////            System.out.println(i);
+////            SquareButton button = (SquareButton) ((TableRow) buttons.getChildAt((i - 1) / row_length)).getChildAt((i - 1) % row_length);
+//////            String button_text = String.format("%d", i % (board_size + 1));
+//////            button.setText(button_text);
+////            button.setTag(i % (board_size + 1));
+////            set_move_button_action(button, i % (board_size + 1));
+////            style_move_button(button, i % (board_size + 1));
+////        }
+//        int row_length = 5;
+//        TableLayout move_buttons = findViewById(R.id.move_buttons);
+////        move_grid.setColumnCount(row_length);
+//        for(int i = 1; i <= board_size + 1; i++) {
+//            SquareButton move_button = new SquareButton(this);
+//            set_move_button_action(move_button, i % (board_size + 1));
+//            style_move_button(move_button, i % (board_size + 1));
+//            move_grid.addView(move_button);
+//        }
+//    }
+
     private void create_move_buttons() {
-        TableLayout buttons = findViewById(R.id.button_layout);
-        int row_length = ((TableRow) buttons.getChildAt(0)).getChildCount();
+        TableLayout move_buttons = findViewById(R.id.move_buttons);
+        move_buttons.setBackgroundColor(board_bg);
+        int row_length = 5;
+        int num_rows = (board_size + 1) / row_length;
+
+        // Add empty rows to the table
+        for (int i = 0; i <  num_rows; i++) {
+            int buttonStyle = R.style.Borderless_Button;
+            TableRow move_row = new TableRow(new ContextThemeWrapper(this, buttonStyle));
+
+            TableLayout.LayoutParams l = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.MATCH_PARENT);
+            l.weight = 1;
+            move_row.setLayoutParams(l);
+            move_buttons.addView(move_row);
+        }
+
+        // Create buttons and add them to the correct row in the layout
         for(int i = 1; i <= board_size + 1; i++) {
-            System.out.println(i);
-            SquareButton button = (SquareButton) ((TableRow) buttons.getChildAt((i - 1) / row_length)).getChildAt((i - 1) % row_length);
-//            String button_text = String.format("%d", i % (board_size + 1));
-//            button.setText(button_text);
-            button.setTag(i % (board_size + 1));
-            set_move_button_action(button, i % (board_size + 1));
-            style_move_button(button, i % (board_size + 1));
+            SquareButton move_button = create_move_button(this, i % (board_size + 1));
+            ((TableRow) move_buttons.getChildAt((i - 1) / row_length)).addView(move_button);
         }
     }
-
-//    private void create_move_buttons() {
-//        TableLayout move_buttons = findViewById(R.id.move_buttons);
-//        move_buttons.setBackgroundColor(board_bg);
-//        int row_length = 5;
-//        int num_rows = (board_size + 1) / row_length;
 //
-//        // Add empty rows to the table
-//        for (int i = 0; i <  num_rows; i++) {
-//            int buttonStyle = R.style.Borderless_Button;
-//            TableRow move_row = new TableRow(new ContextThemeWrapper(this, buttonStyle));
-//
-//            TableLayout.LayoutParams l = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.MATCH_PARENT);
-//            l.weight = 1;
-//            move_row.setLayoutParams(l);
-//            move_buttons.addView(move_row);
-//        }
-//
-//        // Create buttons and add them to the correct row in the layout
-//        for(int i = 1; i <= board_size + 1; i++) {
-//            SquareButton move_button = create_move_button(this, i % (board_size + 1));
-//            ((TableRow) move_buttons.getChildAt((i - 1) / row_length)).addView(move_button);
-//        }
-//    }
-//
-//    private SquareButton create_move_button(Context context, int i)  {
-//        SquareButton move_button = new SquareButton(this);
-//        set_move_button_action(move_button, i);
-//        style_move_button(move_button, i);
-//        return move_button;
-//    }
+    private SquareButton create_move_button(Context context, int i)  {
+        SquareButton move_button = new SquareButton(this);
+        set_move_button_action(move_button, i);
+        style_move_button(move_button, i);
+        return move_button;
+    }
 //
     private void set_move_button_action(SquareButton move_button, int i) {
         move_button.setOnClickListener(e -> {
@@ -171,15 +180,17 @@ public class MainActivity extends AppCompatActivity {
     }
 //
     private void style_move_button(SquareButton move_button, int i) {
-//        TableRow.LayoutParams p = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
-//        p.weight = 1;
-//        move_button.setLayoutParams(p);
+        TableRow.LayoutParams p = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
+        p.weight = 1;
+        move_button.setLayoutParams(p);
         move_button.setGravity(Gravity.CENTER);
         move_button.setTextSize(20);
         move_button.setTextColor(color_default_text);
         move_button.setIncludeFontPadding(false);
-//        String buttonText = (i == 0) ? "X" : String.format(Locale.US, "%d", i);
-//        move_button.setText(buttonText);
+        move_button.setLayoutParams(p);
+//        move_button.setGravity(Gravity.CENTER);
+        String buttonText = (i == 0) ? "X" : String.format(Locale.US, "%d", i);
+        move_button.setText(buttonText);
 //        move_button.setBackgroundColor(board_bg);
     }
 
