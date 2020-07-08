@@ -126,8 +126,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Add empty rows to the table
         for (int i = 0; i <  num_rows; i++) {
-            int buttonStyle = R.style.Borderless_Button;
-            TableRow move_row = new TableRow(new ContextThemeWrapper(this, buttonStyle));
+            TableRow move_row = new TableRow(this);
 
             TableLayout.LayoutParams l = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.MATCH_PARENT);
             l.weight = 1;
@@ -143,8 +142,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private SquareButton create_move_button(Context context, int i)  {
-//        int buttonStyle = R.style.Borderless_Button;
-//        SquareButton move_button = new SquareButton(new ContextThemeWrapper(this, buttonStyle), null, buttonStyle);
         SquareButton move_button = new SquareButton(this);
         set_move_button_action(move_button, i);
         style_move_button(move_button, i);
@@ -273,9 +270,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void highlight_on_click() {
-        white_out_board();
-        highlight_num_row_col_block();
-        highlight_all_of_num();
+        if(cell_has_been_selected) {
+            white_out_board();
+            highlight_num_row_col_block();
+            highlight_all_of_num();
+        }
     }
 
     private void highlight_all_of_num() {
