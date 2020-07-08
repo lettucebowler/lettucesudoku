@@ -39,9 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private int color_correct_bg_light;
     private int color_correct_bg_dark;
     private int board_bg;
-    private int incorrect_bg_light;
     private int incorrect_bg_dark;
-    private int success_bg_light;
     private int success_bg_dark;
     private int color_default_text;
     private int color_correct_text;
@@ -59,9 +57,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Bundle bundle = getIntent().getExtras();
-        order = 2;
+        order = 3;
         if(bundle != null) {
-            order = bundle.getInt("order");
+            int bundle_order = bundle.getInt("order");
+            if (bundle_order == 2 || bundle_order == 3) {
+                order = bundle.getInt("order");
+            }
         }
         initialize_members();
         configure_touchables();
@@ -84,9 +85,7 @@ public class MainActivity extends AppCompatActivity {
         color_correct_bg_light = getColor(R.color.colorCorrectBGLight);
         color_correct_bg_dark = getColor(R.color.colorCorrectBGDark);
         board_bg            = getColor(R.color.colorBoardBG);
-        incorrect_bg_light  = getColor(R.color.colorIncorrectBGLight);
         incorrect_bg_dark   = getColor(R.color.colorIncorrectBGDark);
-        success_bg_light    = getColor(R.color.colorSuccessBGLight);
         success_bg_dark     = getColor(R.color.colorSuccessBGDark);
 
 
@@ -235,26 +234,32 @@ public class MainActivity extends AppCompatActivity {
 
     private SquareTextView make_board_button(Context context, int i, int j) {
         SquareTextView board_button = new SquareTextView(context);
-        set_board_button_margins(board_button, i, j);
-        board_button.setTag(new TableData(i, j));
+        style_board_button(board_button, i, j);
+//        board_button.setTag(new TableData(i, j));
         set_board_button_actions(board_button, i, j);
-        board_button.setTextSize(32);
-        board_button.setIncludeFontPadding(false);
-        board_button.setGravity(Gravity.CENTER);
         return board_button;
     }
 
-    private void set_board_button_margins(SquareTextView board_button, int i, int j) {
+    private void style_board_button(SquareTextView board_button, int i, int j) {
         GridLayout.LayoutParams p = new GridLayout.LayoutParams(GridLayout.spec(GridLayout.UNDEFINED, GridLayout.FILL, 1f),      GridLayout.spec(GridLayout.UNDEFINED, GridLayout.FILL, 1f));
-        int end = board_size - 1;
         p.setMargins(1, 1, 1, 1);
-        if (i % block_size == block_size - 1 && i != end) {
+        if(i == 0) {
+            p.setMargins(p.leftMargin, 4, p.rightMargin, p.bottomMargin);
+        }
+        if(j == 0) {
+            p.setMargins(4, p.topMargin, p.rightMargin, p.bottomMargin);
+        }
+        if(i % block_size == block_size - 1) {
             p.setMargins(p.leftMargin, p.topMargin, p.rightMargin, 4);
         }
-        if (j % block_size == block_size - 1 && j != end) {
+        if(j % block_size == block_size - 1) {
             p.setMargins(p.leftMargin, p.topMargin, 4, p.bottomMargin);
         }
         board_button.setLayoutParams(p);
+        int text_size = order == 3 ? 34 : 76;
+        board_button.setTextSize(text_size);
+        board_button.setIncludeFontPadding(false);
+        board_button.setGravity(Gravity.CENTER);
     }
 
     private void set_board_button_actions(SquareTextView board_button, int i, int j) {
@@ -353,13 +358,13 @@ public class MainActivity extends AppCompatActivity {
     // Call to reset board for new game
     private void populate_board() {
         cell_has_been_selected = false;
-        ArrayList<View> layoutButtons = sudoku_view.getTouchables();
-        for (View view : layoutButtons) {
-            TableData pos = (TableData) view.getTag();
-            int to_place = initial_board[pos.RowIndex][pos.ColumnIndex];
-            String buttonText = (to_place == 0) ? "" : String.format(Locale.US, "%d", to_place);
-            ((SquareTextView) view).setText(buttonText);
-            ((SquareTextView) view).setTextColor(color_default_text);
+        for(int i = 0; i < board_size; i++) {
+            for(int j = 0; j < board_size; j++) {
+                int to_place = initial_board[i][j];
+                String buttonText = (to_place == 0) ? "" : String.format(Locale.US, "%d", to_place);
+                button_grid[i][j].setText(buttonText);
+                button_grid[i][j].setTextColor(color_default_text);
+            }
         }
     }
 
