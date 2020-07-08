@@ -117,32 +117,8 @@ public class MainActivity extends AppCompatActivity {
         configure_hint_button();
     }
 
-//    private void create_move_buttons() {
-////        TableLayout buttons = findViewById(R.id.button_layout);
-////        int row_length = ((TableRow) buttons.getChildAt(0)).getChildCount();
-////        for(int i = 1; i <= board_size + 1; i++) {
-////            System.out.println(i);
-////            SquareButton button = (SquareButton) ((TableRow) buttons.getChildAt((i - 1) / row_length)).getChildAt((i - 1) % row_length);
-//////            String button_text = String.format("%d", i % (board_size + 1));
-//////            button.setText(button_text);
-////            button.setTag(i % (board_size + 1));
-////            set_move_button_action(button, i % (board_size + 1));
-////            style_move_button(button, i % (board_size + 1));
-////        }
-//        int row_length = 5;
-//        TableLayout move_buttons = findViewById(R.id.move_buttons);
-////        move_grid.setColumnCount(row_length);
-//        for(int i = 1; i <= board_size + 1; i++) {
-//            SquareButton move_button = new SquareButton(this);
-//            set_move_button_action(move_button, i % (board_size + 1));
-//            style_move_button(move_button, i % (board_size + 1));
-//            move_grid.addView(move_button);
-//        }
-//    }
-
     private void create_move_buttons() {
         TableLayout move_buttons = findViewById(R.id.move_buttons);
-        move_buttons.setBackgroundColor(board_bg);
         int row_length = 5;
         int num_rows = (board_size + 1) / row_length;
 
@@ -163,35 +139,35 @@ public class MainActivity extends AppCompatActivity {
             ((TableRow) move_buttons.getChildAt((i - 1) / row_length)).addView(move_button);
         }
     }
-//
+
     private SquareButton create_move_button(Context context, int i)  {
-        SquareButton move_button = new SquareButton(this);
+        int buttonStyle = R.style.Borderless_Button;
+        SquareButton move_button = new SquareButton(new ContextThemeWrapper(this, buttonStyle), null, buttonStyle);
         set_move_button_action(move_button, i);
         style_move_button(move_button, i);
         return move_button;
     }
-//
+
     private void set_move_button_action(SquareButton move_button, int i) {
         move_button.setOnClickListener(e -> {
-            if (cell_has_been_selected && initial_board[selected_row][selected_col] == 0) {
+            if (cell_has_been_selected) {
+                if (initial_board[selected_row][selected_col] == 0) {
                     do_move(i, selected_row, selected_col);
+                }
             }
         });
     }
-//
+
     private void style_move_button(SquareButton move_button, int i) {
         TableRow.LayoutParams p = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
         p.weight = 1;
         move_button.setLayoutParams(p);
         move_button.setGravity(Gravity.CENTER);
-        move_button.setTextSize(20);
+        move_button.setTextSize(28);
         move_button.setTextColor(color_default_text);
         move_button.setIncludeFontPadding(false);
-        move_button.setLayoutParams(p);
-//        move_button.setGravity(Gravity.CENTER);
         String buttonText = (i == 0) ? "X" : String.format(Locale.US, "%d", i);
         move_button.setText(buttonText);
-//        move_button.setBackgroundColor(board_bg);
     }
 
     private void configure_reset_button() {
@@ -227,6 +203,7 @@ public class MainActivity extends AppCompatActivity {
                 j = Sudoku.get_random(final_board.length);
                 move_num = final_board[i][j];
             } while (current_board[i][j] != 0);
+            do_move(move_num, i, j);
             int[] hint = {i, j};
             hints_given.add(hint);
             hint_button.setTag(((int) hint_button.getTag()) - 1);
@@ -235,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
             }
             final String finalHint_text = String.format(Locale.US, "hint(%d)", (int)hint_button.getTag());
             hint_button.setText(finalHint_text);
-            do_move(move_num, i, j);
+            update_cell(i, j);
         }
         else {
             Toast.makeText(this, "Puzzle already solved!", Toast.LENGTH_SHORT).show();
@@ -289,11 +266,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void highlight_on_click() {
-        if(cell_has_been_selected) {
-            white_out_board();
-            highlight_num_row_col_block();
-            highlight_all_of_num();
-        }
+        white_out_board();
+        highlight_num_row_col_block();
+        highlight_all_of_num();
     }
 
     private void highlight_all_of_num() {
@@ -373,13 +348,14 @@ public class MainActivity extends AppCompatActivity {
     // Call to reset board for new game
     private void populate_board() {
         cell_has_been_selected = false;
-        for(int i = 0; i < board_size; i++) {
-            for(int j = 0; j < board_size; j++) {
-                int to_place = initial_board[i][j];
-                String buttonText = (to_place == 0) ? "" : String.format(Locale.US, "%d", to_place);
-                button_grid[i][j].setText(buttonText);
-                button_grid[i][j].setTextColor(color_default_text);
-            }
+        ArrayList<View> layoutButtons = sudoku_view.getTouchables();
+        for (View view : layoutButtons) {
+            TableData pos = (TableData) view.getTag();
+            int to_place = initial_board[pos.RowIndex][pos.ColumnIndex];
+            String buttonText = (to_place == 0) ? "" : String.format(Locale.US, "%d", to_place);
+            ((SquareTextView) view).setText(buttonText);
+            ((SquareTextView) view).setTextColor(color_default_text);
+            view.setEnabled(true);
         }
     }
 
@@ -393,10 +369,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void white_out_board() {
-        for(int i = 0; i < board_size; i++) {
-            for(int j = 0; j < board_size; j++) {
-                button_grid[i][j].setBackgroundColor(board_bg);
-            }
+        ArrayList<View> cells = sudoku_view.getTouchables();
+        for (View cell : cells) {
+            cell.setBackgroundColor(board_bg);
         }
     }
 
@@ -417,6 +392,9 @@ public class MainActivity extends AppCompatActivity {
             solving_assistant.tryMove(move);
             if (solving_assistant.isMoveLegal()) {
                 update_cell(row, col);
+            }
+            else {
+                Toast.makeText(this, "Illegal move.", Toast.LENGTH_SHORT).show();
             }
             if (solving_assistant.isProblemSolved()) {
                 Toast.makeText(this, "Puzzle solved!", Toast.LENGTH_SHORT).show();

@@ -6,177 +6,31 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <view
-        android:id="@+id/sudoku_grid"
-        class="com.lettucebowler.lettucesudoku.MainActivity$SquareGridLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="#000000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </view>
-
-<!--    <TableLayout-->
-<!--        android:id="@+id/button_layout"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="8dp"-->
-<!--        android:layout_marginEnd="8dp"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/game_buttons"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent">-->
-
-<!--        <TableRow-->
-<!--            android:id="@+id/move_row_top"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_marginStart="8dp"-->
-<!--            android:layout_marginEnd="8dp"-->
-<!--            android:layout_marginBottom="0dp"-->
-<!--            style="?android:attr/buttonBarStyle">-->
-
-<!--            <view-->
-<!--                android:id="@+id/button_1"-->
-<!--                class="com.lettucebowler.lettucesudoku.MainActivity$SquareButton"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="1" />-->
-
-<!--            <view-->
-<!--                android:id="@+id/button_2"-->
-<!--                class="com.lettucebowler.lettucesudoku.MainActivity$SquareButton"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="2" />-->
-
-<!--            <view-->
-<!--                android:id="@+id/button_3"-->
-<!--                class="com.lettucebowler.lettucesudoku.MainActivity$SquareButton"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="3" />-->
-
-<!--            <view-->
-<!--                android:id="@+id/button_4"-->
-<!--                class="com.lettucebowler.lettucesudoku.MainActivity$SquareButton"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="4" />-->
-
-<!--            <view-->
-<!--                android:id="@+id/button_5"-->
-<!--                class="com.lettucebowler.lettucesudoku.MainActivity$SquareButton"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="5" />-->
-<!--        </TableRow>-->
-
-<!--        <TableRow-->
-<!--            android:id="@+id/move_row_bottom"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_marginStart="8dp"-->
-<!--            android:layout_marginEnd="8dp"-->
-<!--            android:layout_marginBottom="8dp"-->
-<!--            style="?android:attr/buttonBarStyle">-->
-
-<!--            <view-->
-<!--                android:id="@+id/button_6"-->
-<!--                class="com.lettucebowler.lettucesudoku.MainActivity$SquareButton"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="6" />-->
-
-<!--            <view-->
-<!--                android:id="@+id/button_7"-->
-<!--                class="com.lettucebowler.lettucesudoku.MainActivity$SquareButton"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="7" />-->
-
-<!--            <view-->
-<!--                android:id="@+id/button_8"-->
-<!--                class="com.lettucebowler.lettucesudoku.MainActivity$SquareButton"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="8" />-->
-
-<!--            <view-->
-<!--                android:id="@+id/button_9"-->
-<!--                class="com.lettucebowler.lettucesudoku.MainActivity$SquareButton"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="9"-->
-<!--                style="?android:attr/buttonBarButtonStyle"/>-->
-
-<!--            <view-->
-<!--                android:id="@+id/button_10"-->
-<!--                class="com.lettucebowler.lettucesudoku.MainActivity$SquareButton"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_weight="1"-->
-<!--                android:text="10"-->
-<!--                style="?android:attr/buttonBarButtonStyle"/>-->
-
-<!--        </TableRow>-->
-
-<!--    </TableLayout>-->
-
     <TableLayout
         android:id="@+id/move_buttons"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/game_buttons"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sudoku_grid">
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </TableLayout>
-
-    <TableRow
-        android:id="@+id/game_buttons"
         style="?android:attr/buttonBarStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/game_buttons"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sudoku_grid"></TableLayout>
+
+    <TableRow
+        android:id="@+id/game_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        style="?android:attr/buttonBarStyle">
 
         <Button
             android:id="@+id/button_reset"
@@ -194,5 +48,34 @@
             android:layout_weight="1"
             android:text="@string/button_hint" />
     </TableRow>
+
+    <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/number_grid"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </androidx.gridlayout.widget.GridLayout>
+
+    <view
+        android:id="@+id/sudoku_grid"
+        class="com.lettucebowler.lettucesudoku.MainActivity$SquareGridLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </view>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
