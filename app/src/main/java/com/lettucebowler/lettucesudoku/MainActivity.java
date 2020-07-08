@@ -1,8 +1,10 @@
 package com.lettucebowler.lettucesudoku;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -141,8 +143,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private SquareButton create_move_button(Context context, int i)  {
-        int buttonStyle = R.style.Borderless_Button;
-        SquareButton move_button = new SquareButton(new ContextThemeWrapper(this, buttonStyle), null, buttonStyle);
+//        int buttonStyle = R.style.Borderless_Button;
+//        SquareButton move_button = new SquareButton(new ContextThemeWrapper(this, buttonStyle), null, buttonStyle);
+        SquareButton move_button = new SquareButton(this);
         set_move_button_action(move_button, i);
         style_move_button(move_button, i);
         return move_button;
@@ -161,11 +164,15 @@ public class MainActivity extends AppCompatActivity {
     private void style_move_button(SquareButton move_button, int i) {
         TableRow.LayoutParams p = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
         p.weight = 1;
+//        p.setMargins(1, 1, 1, 1);
         move_button.setLayoutParams(p);
         move_button.setGravity(Gravity.CENTER);
         move_button.setTextSize(28);
         move_button.setTextColor(color_default_text);
         move_button.setIncludeFontPadding(false);
+        TypedValue outValue = new TypedValue();
+        this.getTheme().resolveAttribute(R.attr.selectableItemBackground, outValue, true);
+        move_button.setBackgroundResource(outValue.resourceId);
         String buttonText = (i == 0) ? "X" : String.format(Locale.US, "%d", i);
         move_button.setText(buttonText);
     }

@@ -6,6 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <view
+        android:id="@+id/sudoku_grid"
+        class="com.lettucebowler.lettucesudoku.MainActivity$SquareGridLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </view>
+
     <TableLayout
         android:id="@+id/move_buttons"
         style="?android:attr/buttonBarStyle"
@@ -17,8 +32,7 @@
         app:layout_constraintBottom_toTopOf="@+id/game_buttons"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sudoku_grid"></TableLayout>
+        app:layout_constraintStart_toStartOf="parent"></TableLayout>
 
     <TableRow
         android:id="@+id/game_buttons"
@@ -48,34 +62,5 @@
             android:layout_weight="1"
             android:text="@string/button_hint" />
     </TableRow>
-
-    <androidx.gridlayout.widget.GridLayout
-        android:id="@+id/number_grid"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="#000000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </androidx.gridlayout.widget.GridLayout>
-
-    <view
-        android:id="@+id/sudoku_grid"
-        class="com.lettucebowler.lettucesudoku.MainActivity$SquareGridLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="#000000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </view>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
