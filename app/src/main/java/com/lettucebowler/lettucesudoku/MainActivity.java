@@ -2,6 +2,7 @@ package com.lettucebowler.lettucesudoku;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -122,16 +123,17 @@ public class MainActivity extends AppCompatActivity {
     private void create_move_buttons() {
         TableLayout move_buttons = findViewById(R.id.move_buttons);
         int row_length = 5;
-        int num_rows = (board_size + 1) / row_length;
+        int num_rows = (int) Math.ceil((double)(board_size + 1) / (double)row_length);
 
         // Add empty rows to the table
         for (int i = 0; i <  num_rows; i++) {
             TableRow move_row = new TableRow(this);
-
             TableLayout.LayoutParams l = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.MATCH_PARENT);
             l.weight = 1;
             move_row.setLayoutParams(l);
-            move_buttons.addView(move_row);
+            move_row.setDividerDrawable(new ColorDrawable(Color.BLACK));
+            move_row.setShowDividers(TableRow.SHOW_DIVIDER_MIDDLE);
+            move_buttons.addView(move_row, 0);
         }
 
         // Create buttons and add them to the correct row in the layout
@@ -161,7 +163,6 @@ public class MainActivity extends AppCompatActivity {
     private void style_move_button(SquareButton move_button, int i) {
         TableRow.LayoutParams p = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
         p.weight = 1;
-//        p.setMargins(1, 1, 1, 1);
         move_button.setLayoutParams(p);
         move_button.setGravity(Gravity.CENTER);
         move_button.setTextSize(28);

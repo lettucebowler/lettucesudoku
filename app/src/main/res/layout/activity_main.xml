@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F2F2F2"
     tools:context=".MainActivity">
 
     <view
@@ -29,22 +30,28 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:divider="@color/colorPrimary"
+        android:showDividers="middle"
         app:layout_constraintBottom_toTopOf="@+id/game_buttons"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"></TableLayout>
+        app:layout_constraintStart_toStartOf="parent">
+
+    </TableLayout>
 
     <TableRow
         android:id="@+id/game_buttons"
+        style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:divider="@color/colorDefaultText"
+        android:showDividers="middle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        style="?android:attr/buttonBarStyle">
+        app:layout_constraintStart_toStartOf="parent">
 
         <Button
             android:id="@+id/button_reset"
