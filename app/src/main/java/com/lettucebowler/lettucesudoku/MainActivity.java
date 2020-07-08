@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Bundle bundle = getIntent().getExtras();
-        order = 3;
+        order = 2;
         if(bundle != null) {
             order = bundle.getInt("order");
         }
@@ -131,8 +131,8 @@ public class MainActivity extends AppCompatActivity {
             TableLayout.LayoutParams l = new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.MATCH_PARENT);
             l.weight = 1;
             move_row.setLayoutParams(l);
-            move_row.setDividerDrawable(new ColorDrawable(Color.BLACK));
-            move_row.setShowDividers(TableRow.SHOW_DIVIDER_MIDDLE);
+//            move_row.setDividerDrawable(new ColorDrawable(Color.BLACK));
+//            move_row.setShowDividers(TableRow.SHOW_DIVIDER_MIDDLE);
             move_buttons.addView(move_row, 0);
         }
 
