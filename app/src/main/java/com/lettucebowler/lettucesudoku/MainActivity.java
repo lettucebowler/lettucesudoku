@@ -479,15 +479,5 @@ public class MainActivity extends AppCompatActivity {
             int size = Math.min(width, height);
             setMeasuredDimension(size, size); // make it square
         }
-    };
-
-    public static class TableData{
-        public final int RowIndex;
-        public final int ColumnIndex;
-
-        public TableData(int rowIndex, int columnIndex) {
-            RowIndex = rowIndex;
-            ColumnIndex = columnIndex;
-        }
     }
 }
