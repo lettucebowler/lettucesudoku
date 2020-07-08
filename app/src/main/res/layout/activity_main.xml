@@ -52,7 +52,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/button_reset" />
+            android:text="@string/button_reset"
+            android:textColor="@color/colorDefaultText"
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/button_hint"
@@ -60,7 +62,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/button_hint" />
+            android:text="@string/button_hint"
+            android:textColor="@color/colorDefaultText"
+            android:textSize="20sp" />
     </TableRow>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
