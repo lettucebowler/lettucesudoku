@@ -88,11 +88,11 @@ public class MainActivity extends AppCompatActivity {
         boolean do_legality = button != null && ((RadioButton)color_rule.getChildAt(0)).isChecked();
         intent.putExtra("do_legality", do_legality);
 
-        System.out.println("write_game_bundle()");
-        System.out.println("hint offset: " + hint_offset);
-        System.out.println("do_peer_cells: " + do_peer_cells);
-        System.out.println("do_peer_digits: " + do_peer_digits);
-        System.out.println("do_legality: " + do_legality);
+//        System.out.println("write_game_bundle()");
+//        System.out.println("hint offset: " + hint_offset);
+//        System.out.println("do_peer_cells: " + do_peer_cells);
+//        System.out.println("do_peer_digits: " + do_peer_digits);
+//        System.out.println("do_legality: " + do_legality);
 
         return intent;
     }

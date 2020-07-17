@@ -1,5 +1,6 @@
 package com.lettucebowler.lettucesudoku;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -75,19 +76,19 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 0) {
-            System.out.println("onActivityResult()");
+        if(resultCode == Activity.RESULT_OK) {
             read_bundle(data);
-            System.out.println("hint offset: " + hint_offset);
-            System.out.println("do_peer_cells: " + do_peer_cells);
-            System.out.println("do_peer_digits: " + do_peer_digits);
-            System.out.println("do_legality: " + do_legality);
+//            System.out.println("onActivityResult()");
+//            System.out.println("hint offset: " + hint_offset);
+//            System.out.println("do_peer_cells: " + do_peer_cells);
+//            System.out.println("do_peer_digits: " + do_peer_digits);
+//            System.out.println("do_legality: " + do_legality);
         }
     }
 
     private void read_bundle(Intent intent) {
 //        Intent intent = getIntent();
-        System.out.println("read_bundle()");
+//        System.out.println("read_bundle()");
         Bundle bundle = intent.getExtras();
         if(bundle != null) {
             if(intent.hasExtra("order")) {
