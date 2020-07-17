@@ -1,6 +1,7 @@
 package com.lettucebowler.lettucesudoku;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -30,6 +31,7 @@ public class GameActivity extends AppCompatActivity {
     private Button hint_button;
     private int board_size;
     private int block_size;
+    private int hint_offset;
     private int order;
     private int selected_row;
     private int selected_col;
@@ -46,6 +48,9 @@ public class GameActivity extends AppCompatActivity {
     private int[][] current_board;
     private int[][] final_board;
     private boolean cell_has_been_selected;
+    private boolean do_peer_cells;
+    private boolean do_peer_digits;
+    private boolean do_legality;
     private ArrayList<int[]> hints_given;
     private SquareTextView[][] button_grid;
 
@@ -53,12 +58,26 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        Bundle bundle = getIntent().getExtras();
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
         order = 3;
         if(bundle != null) {
-            int bundle_order = bundle.getInt("order");
-            if (bundle_order == 2 || bundle_order == 3) {
-                order = bundle.getInt("order");
+            if(intent.hasExtra("order")) {
+                int bundle_order = bundle.getInt("order");
+                order = (bundle_order == 2 || bundle_order == 3) ? bundle_order : 3;
+            }
+            if(intent.hasExtra("hint_offset")) {
+                int hints = bundle.getInt("hint_offset");
+                hint_offset = 0 <= hints && hints <= 20 ? hints : 10;
+            }
+            if(intent.hasExtra("do_peer_cells")) {
+                do_peer_cells = bundle.getBoolean("do_peer_cells");
+            }
+            if(intent.hasExtra("do_peer_digits")) {
+                do_peer_digits = bundle.getBoolean("do_peer_digits");
+            }
+            if(intent.hasExtra("do_legality")) {
+                do_legality = bundle.getBoolean("do_legality");
             }
         }
         initialize_members();
