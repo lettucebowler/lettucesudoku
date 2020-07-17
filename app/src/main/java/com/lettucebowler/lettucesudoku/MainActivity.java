@@ -27,12 +27,13 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, GameActivity.class);
             intent.putExtra("hint_offset", difficulty_slider.getProgress());
             boolean do_peer_cells = peer_cells.getText() == "On";
-            intent.putExtra("highlight_peer_cells", do_peer_cells);
+            intent.putExtra("do_peer_cells", do_peer_cells);
             boolean do_peer_digits = peer_digits.getText() == "On";
-            intent.putExtra("highlight_peer_digits", do_peer_digits);
-            RadioButton button =  findViewById(color_rule.getCheckedRadioButtonId());
-            boolean do_legality = button.getText() == "Legality";
-            intent.putExtra("color_by_legality", do_legality);
+            intent.putExtra("do_peer_digits", do_peer_digits);
+            int id = color_rule.getCheckedRadioButtonId();
+            RadioButton button =  findViewById(id);
+            boolean do_legality = button != null && button.getText() == "Legality";
+            intent.putExtra("do_legality", do_legality);
             startActivity(intent);
         });
     }
