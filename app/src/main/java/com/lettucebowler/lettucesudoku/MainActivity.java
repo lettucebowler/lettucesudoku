@@ -11,6 +11,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TableLayout;
@@ -57,6 +58,9 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra("highlight_peer_cells", do_peer_cells);
             boolean do_peer_digits = peer_digits.getText() == "On";
             intent.putExtra("highlight_peer_digits", do_peer_digits);
+            RadioButton button =  findViewById(color_rule.getCheckedRadioButtonId());
+            boolean do_legality = button.getText() == "Legality";
+            intent.putExtra("color_by_legality", do_legality);
             startActivity(intent);
         });
     }
