@@ -142,11 +142,11 @@
         app:layout_constraintTop_toBottomOf="@+id/Difficulty_label">
 
         <TextView
-            android:id="@+id/easy_label"
+            android:id="@+id/hard_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Easy"
+            android:text="Hard"
             android:textAlignment="center" />
 
         <TextView
@@ -158,12 +158,13 @@
             android:textAlignment="center" />
 
         <TextView
-            android:id="@+id/hard_label"
+            android:id="@+id/easy_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Hard"
+            android:text="Easy"
             android:textAlignment="center" />
+
     </TableRow>
 
     <TextView

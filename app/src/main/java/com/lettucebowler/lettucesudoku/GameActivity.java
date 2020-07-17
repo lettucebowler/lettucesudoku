@@ -78,6 +78,7 @@ public class GameActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == Activity.RESULT_OK) {
             read_bundle(data);
+            update_board();
 //            System.out.println("onActivityResult()");
 //            System.out.println("hint offset: " + hint_offset);
 //            System.out.println("do_peer_cells: " + do_peer_cells);
@@ -341,7 +342,21 @@ public class GameActivity extends AppCompatActivity {
                 highlight_all_of_num();
             }
             button_grid[selected_row][selected_col].setBackgroundColor(color_correct_bg_dark);
+
         }
+    }
+
+    private boolean cell_good(int row, int col) {
+        boolean good = true;
+        if(get_current_board()[row][col] != 0) {
+            if(do_legality) {
+                good = problem.is_legal(row, col);
+            }
+            else {
+                good = problem.is_correct(row, col);
+            }
+        }
+        return good;
     }
 
     private void highlight_all_of_num() {
@@ -351,16 +366,11 @@ public class GameActivity extends AppCompatActivity {
             for(int j = 0; j < board_size; j++) {
                 int cur_cell = current_board[i][j];
                 if(cur_cell == cell_num && cell_num != 0) {
-                    if (final_board[i][j] == cell_num) {
-                        button_grid[i][j].setBackgroundColor(color_correct_bg_dark);
-                    }
-                    else {
-                        button_grid[i][j].setBackgroundColor(incorrect_bg_dark);
-                    }
+                    button_grid[i][j].setBackgroundColor(color_correct_bg_dark);
+
                 }
             }
         }
-//        button_grid[selected_row][selected_col].setBackgroundColor(board_bg);
     }
 
     private void highlight_num_row_col_block() {
@@ -381,14 +391,28 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    private void update_board() {
+        for(int i = 0; i < board_size; i++) {
+            for(int j = 0; j < board_size; j++) {
+                update_cell(i, j);
+            }
+        }
+    }
+
     private void update_cell(int row, int col) {
         current_board = get_current_board();
         int to_place = current_board[row][col];
         String buttonText = (to_place == 0) ? "" : String.format(Locale.US, "%d", to_place);
         SquareTextView grid_cell = button_grid[row][col];
         grid_cell.setText(String.format(buttonText));
-        set_board_text_color(grid_cell, row, col);
         highlight_on_click();
+
+        if(do_legality) {
+            recolor_board();
+        }
+        else {
+            set_board_text_color(row, col);
+        }
 
         if (problem.success()) {
             highlight_on_success();
@@ -396,13 +420,23 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    private void set_board_text_color(SquareTextView view, int row, int col) {
-        if(problem.is_correct(row, col)) {
+    private void recolor_board() {
+        for(int i = 0; i < board_size; i++) {
+            for(int j = 0; j < board_size; j++) {
+                set_board_text_color(i, j);
+            }
+        }
+    }
+
+    private void set_board_text_color(int row, int col) {
+        SquareTextView view = button_grid[row][col];
+        if(cell_good(row, col)) {
             view.setTextColor(color_correct_text);
         }
         else {
             view.setTextColor(color_incorrect_text);
         }
+
         if(problem.is_initial_hint(row, col)) {
             view.setTextColor(color_default_text);
         }
