@@ -23,10 +23,12 @@
         android:id="@+id/TableRow_peer_cell"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/TableRow_peer_digits"
-        app:layout_constraintEnd_toEndOf="@+id/TableRow_peer_digits"
-        app:layout_constraintStart_toStartOf="@+id/TableRow_peer_digits">
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView23">
 
         <TextView
             android:id="@+id/peer_cell_label"
@@ -47,10 +49,10 @@
         android:id="@+id/TableRow_peer_digits"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/TableRow_color_rule"
-        app:layout_constraintEnd_toEndOf="@+id/TableRow_color_rule"
-        app:layout_constraintStart_toStartOf="@+id/TableRow_color_rule">
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/TableRow_peer_cell"
+        app:layout_constraintStart_toStartOf="@+id/TableRow_peer_cell"
+        app:layout_constraintTop_toBottomOf="@+id/TableRow_peer_cell">
 
         <TextView
             android:id="@+id/peer_digit_label"
@@ -71,11 +73,11 @@
         android:id="@+id/TableRow_color_rule"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
         android:gravity="center_vertical"
-        app:layout_constraintBottom_toTopOf="@+id/textView22"
-        app:layout_constraintEnd_toEndOf="@+id/button_launch"
-        app:layout_constraintStart_toStartOf="@+id/button_launch">
+        app:layout_constraintEnd_toEndOf="@+id/TableRow_peer_digits"
+        app:layout_constraintStart_toStartOf="@+id/TableRow_peer_digits"
+        app:layout_constraintTop_toBottomOf="@+id/TableRow_peer_digits">
 
         <TextView
             android:id="@+id/digit_color_label"
@@ -105,28 +107,39 @@
     </TableRow>
 
     <SeekBar
-        android:id="@+id/seekBar4"
+        android:id="@+id/seekBar_difficulty"
         style="@style/Widget.AppCompat.SeekBar.Discrete"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp"
         android:max="20"
         android:progress="10"
-        app:layout_constraintBottom_toTopOf="@+id/button_launch"
-        app:layout_constraintEnd_toEndOf="@+id/button_launch"
-        app:layout_constraintStart_toStartOf="@+id/button_launch" />
+        app:layout_constraintEnd_toEndOf="@+id/row_difficulty_labels"
+        app:layout_constraintStart_toStartOf="@+id/row_difficulty_labels"
+        app:layout_constraintTop_toBottomOf="@+id/row_difficulty_labels" />
+
+    <TextView
+        android:id="@+id/Difficulty_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Difficulty"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/TableRow_color_rule"
+        app:layout_constraintStart_toStartOf="@+id/TableRow_color_rule"
+        app:layout_constraintTop_toBottomOf="@+id/TableRow_color_rule" />
 
     <TableRow
-        android:id="@+id/tableRow2"
+        android:id="@+id/row_difficulty_labels"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/seekBar4"
-        app:layout_constraintEnd_toEndOf="@+id/seekBar4"
-        app:layout_constraintStart_toStartOf="@+id/seekBar4">
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/TableRow_color_rule"
+        app:layout_constraintStart_toStartOf="@+id/TableRow_color_rule"
+        app:layout_constraintTop_toBottomOf="@+id/Difficulty_label">
 
         <TextView
-            android:id="@+id/textView19"
+            android:id="@+id/easy_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -134,7 +147,7 @@
             android:textAlignment="center" />
 
         <TextView
-            android:id="@+id/textView20"
+            android:id="@+id/medium_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -142,7 +155,7 @@
             android:textAlignment="center" />
 
         <TextView
-            android:id="@+id/textView21"
+            android:id="@+id/hard_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -151,14 +164,14 @@
     </TableRow>
 
     <TextView
-        android:id="@+id/textView22"
+        android:id="@+id/textView23"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:text="Difficulty"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/tableRow2"
-        app:layout_constraintEnd_toEndOf="@+id/tableRow2"
-        app:layout_constraintStart_toStartOf="@+id/tableRow2" />
+        android:layout_marginTop="8dp"
+        android:text="Preferences"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="@+id/TableRow_peer_cell"
+        app:layout_constraintStart_toStartOf="@+id/TableRow_peer_cell"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
