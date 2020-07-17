@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorBoardBG"
-    tools:context=".MainActivity">
+    tools:context=".GameActivity">
 
     <view
-        android:id="@+id/sudoku_grid"
-        class="com.lettucebowler.lettucesudoku.MainActivity$SquareGridLayout"
+        android:id="@+id/board"
+        class="com.lettucebowler.lettucesudoku.GameActivity$SquareGridLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

@@ -52,7 +52,7 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_game);
         Bundle bundle = getIntent().getExtras();
         order = 3;
         if(bundle != null) {
@@ -68,7 +68,7 @@ public class GameActivity extends AppCompatActivity {
     private void initialize_members() {
         problem = new SudokuProblem(order);
         solving_assistant = new SolvingAssistant(problem);
-        sudoku_view = findViewById(R.id.sudoku_grid);
+        sudoku_view = findViewById(R.id.board);
         board_size = ((SudokuState)problem.getCurrentState()).getTiles().length;
         block_size = (int)Math.sqrt(board_size);
         hints_given = new ArrayList<>();
