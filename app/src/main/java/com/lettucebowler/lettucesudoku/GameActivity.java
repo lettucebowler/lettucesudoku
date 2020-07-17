@@ -88,6 +88,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void read_bundle(Intent intent) {
+
 //        Intent intent = getIntent();
 //        System.out.println("read_bundle()");
         Bundle bundle = intent.getExtras();
@@ -98,7 +99,7 @@ public class GameActivity extends AppCompatActivity {
             }
             if(intent.hasExtra("hint_offset")) {
                 int hints = bundle.getInt("hint_offset");
-                hint_offset = 0 <= hints && hints <= 20 ? hints : 10;
+                hint_offset = 0 <= hints && hints <= 51 ? hints : 10;
             }
             if(intent.hasExtra("do_peer_cells")) {
                 do_peer_cells = bundle.getBoolean("do_peer_cells");
@@ -113,17 +114,18 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void initialize_members() {
-        problem = new SudokuProblem(order);
+        problem = new SudokuProblem(order, hint_offset);
         solving_assistant = new SolvingAssistant(problem);
+
         sudoku_view = findViewById(R.id.board);
         board_size = ((SudokuState)problem.getCurrentState()).getTiles().length;
         block_size = (int)Math.sqrt(board_size);
-        hints_given = new ArrayList<>();
         cell_has_been_selected = false;
         button_grid = new SquareTextView[board_size][board_size];
-        initial_board = ((SudokuState) problem.getInitialState()).getTiles();
-        current_board = get_current_board();
-        final_board = ((SudokuState) problem.getFinalState()).getTiles();
+        hints_given = new ArrayList<>();
+//        initial_board = ((SudokuState) problem.getInitialState()).getTiles();
+//        current_board = get_current_board();
+//        final_board = ((SudokuState) problem.getFinalState()).getTiles();
 
         // highlight colors
         color_correct_bg_light = getColor(R.color.colorCorrectBGLight);
@@ -234,7 +236,6 @@ public class GameActivity extends AppCompatActivity {
     private void configure_reset_button() {
         Button reset_button = findViewById(R.id.button_reset);
         reset_button.setOnClickListener(View -> {
-            problem = new SudokuProblem(order);
             reset_button.setEnabled(false);
             reset_board();
             reset_button.setEnabled(true);
@@ -287,8 +288,7 @@ public class GameActivity extends AppCompatActivity {
             sudoku_view.addView(gridButton);
             button_grid[i / board_size][i % board_size] = gridButton;
         }
-        white_out_board();
-        populate_board();
+        reset_board();
     }
 
     private SquareTextView make_board_button(Context context, int i, int j) {
@@ -481,12 +481,16 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    private void reset_board() {
-        problem = new SudokuProblem(order);
+    private void new_game() {
+        problem = new SudokuProblem(order, hint_offset);
         solving_assistant = new SolvingAssistant(problem);
         initial_board = get_initial_board();
         final_board = get_final_board();
         hints_given.clear();
+    }
+
+    private void reset_board() {
+        new_game();
         white_out_board();
         configure_hint_button();
         populate_board();
