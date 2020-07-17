@@ -26,9 +26,9 @@ public class MainActivity extends AppCompatActivity {
         launch_button.setOnClickListener(e -> {
             Intent intent = new Intent(this, GameActivity.class);
             intent.putExtra("hint_offset", difficulty_slider.getProgress());
-            boolean do_peer_cells = peer_cells.getText() == "On";
+            boolean do_peer_cells = peer_cells.isChecked();
             intent.putExtra("do_peer_cells", do_peer_cells);
-            boolean do_peer_digits = peer_digits.getText() == "On";
+            boolean do_peer_digits = peer_digits.isChecked();
             intent.putExtra("do_peer_digits", do_peer_digits);
             int id = color_rule.getCheckedRadioButtonId();
             RadioButton button =  findViewById(id);

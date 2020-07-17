@@ -292,8 +292,13 @@ public class GameActivity extends AppCompatActivity {
     private void highlight_on_click() {
         if(cell_has_been_selected) {
             white_out_board();
-            highlight_num_row_col_block();
-            highlight_all_of_num();
+            if(do_peer_cells) {
+                highlight_num_row_col_block();
+            }
+            if(do_peer_digits) {
+                highlight_all_of_num();
+            }
+            button_grid[selected_row][selected_col].setBackgroundColor(color_correct_bg_dark);
         }
     }
 
@@ -313,7 +318,7 @@ public class GameActivity extends AppCompatActivity {
                 }
             }
         }
-        button_grid[selected_row][selected_col].setBackgroundColor(board_bg);
+//        button_grid[selected_row][selected_col].setBackgroundColor(board_bg);
     }
 
     private void highlight_num_row_col_block() {

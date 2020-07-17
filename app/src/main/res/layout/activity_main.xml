@@ -42,6 +42,7 @@
             android:id="@+id/peer_cell_toggle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:text="ToggleButton" />
     </TableRow>
 
@@ -66,6 +67,7 @@
             android:id="@+id/peer_digit_toggle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:text="ToggleButton" />
     </TableRow>
 
@@ -102,6 +104,7 @@
                 android:id="@+id/digit_color_correct"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:checked="true"
                 android:text="Correctness" />
         </RadioGroup>
     </TableRow>
