@@ -9,6 +9,7 @@ import java.util.Arrays;
 public class Sudoku {
     private int board_size;
     private int cell_size;
+    private int hint_offset;
     private int[][] board_filled;
     private int[][] board_temp;
     private int[][] board_emptied;
@@ -16,6 +17,19 @@ public class Sudoku {
     public Sudoku(int cell_size) {
         this.cell_size = cell_size;
         this.board_size = cell_size * cell_size;
+        this.board_size = cell_size * cell_size;
+        this.hint_offset = 0;
+        this.board_filled = new int[board_size][board_size];
+        this.board_temp = new int[board_size][board_size];
+        this.generate_filled();
+        this.scramble_board();
+        this.prepare_puzzle();
+    }
+
+    public Sudoku(int cell_size, int hint_offset) {
+        this.cell_size = cell_size;
+        this.board_size = cell_size * cell_size;
+        this.hint_offset = hint_offset;
         this.board_filled = new int[board_size][board_size];
         this.board_temp = new int[board_size][board_size];
         this.generate_filled();
@@ -194,7 +208,7 @@ public class Sudoku {
         if (this.cell_size == 2) {
             max_remove = 12;
         } else if (this.cell_size == 3) {
-            max_remove = 51;
+            max_remove = 51 - hint_offset;
         } else if (this.cell_size == 4) {
             max_remove = 150;
         } else {
