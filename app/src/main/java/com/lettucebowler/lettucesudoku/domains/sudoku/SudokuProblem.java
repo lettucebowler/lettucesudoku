@@ -32,6 +32,22 @@ public class SudokuProblem extends Problem {
         super.setFinalState(new SudokuState(sudoku.get_board_filled()));
     }
 
+    public SudokuProblem(int cell_size, int hint_offset) {
+        super();
+        super.setName("Sudoku");
+        super.setIntroduction("Place the numbers 1-9 in each of the three 3x3 grids. "
+                + "Each row must contain each number 1-9. "
+                + "Each Column must contain each number 1-9"
+                + "for each cell in the grid, there can be no other cell with the same "
+                + "row or column that contains the same number. "
+                + "The game is finished when the grid is full.");
+        sudoku = new Sudoku(cell_size, hint_offset);
+        super.setMover(new SudokuMover(cell_size * cell_size));
+        super.setInitialState(new SudokuState(sudoku.get_board_emptied()));
+        super.setCurrentState(super.getInitialState());
+        super.setFinalState(new SudokuState(sudoku.get_board_filled()));
+    }
+
     public Sudoku get_sudoku() {
         return sudoku;
     }
