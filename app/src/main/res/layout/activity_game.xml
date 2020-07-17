@@ -70,6 +70,15 @@
             android:text="@string/button_hint"
             android:textColor="@color/colorDefaultText"
             android:textSize="20sp" />
+
+        <ImageButton
+            android:id="@+id/button_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="settings button"
+            style="?android:attr/buttonBarButtonStyle"
+            app:srcCompat="@android:drawable/ic_menu_manage" />
+
     </TableRow>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

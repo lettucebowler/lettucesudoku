@@ -8,6 +8,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.Toast;
@@ -58,9 +59,36 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
+        read_bundle(getIntent());
         order = 3;
+        initialize_members();
+        configure_touchables();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        read_bundle(getIntent());
+        highlight_on_click();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 0) {
+            System.out.println("onActivityResult()");
+            read_bundle(data);
+            System.out.println("hint offset: " + hint_offset);
+            System.out.println("do_peer_cells: " + do_peer_cells);
+            System.out.println("do_peer_digits: " + do_peer_digits);
+            System.out.println("do_legality: " + do_legality);
+        }
+    }
+
+    private void read_bundle(Intent intent) {
+//        Intent intent = getIntent();
+        System.out.println("read_bundle()");
+        Bundle bundle = intent.getExtras();
         if(bundle != null) {
             if(intent.hasExtra("order")) {
                 int bundle_order = bundle.getInt("order");
@@ -80,8 +108,6 @@ public class GameActivity extends AppCompatActivity {
                 do_legality = bundle.getBoolean("do_legality");
             }
         }
-        initialize_members();
-        configure_touchables();
     }
 
     private void initialize_members() {
@@ -130,9 +156,24 @@ public class GameActivity extends AppCompatActivity {
         create_move_buttons();
     }
 
+    private void configure_menu_button() {
+        ImageButton button = findViewById(R.id.button_menu);
+        button.setOnClickListener(e -> {
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("hint_offset", hint_offset);
+            intent.putExtra("do_peer_cells", do_peer_cells);
+            intent.putExtra("do_peer_digits", do_peer_digits);
+            intent.putExtra("do_legality", do_legality);
+            intent.putExtra("game_in_progress", true);
+            startActivityForResult(intent, 0);
+        });
+    }
+
+
     private void configure_game_buttons() {
         configure_reset_button();
         configure_hint_button();
+        configure_menu_button();
     }
 
     private void create_move_buttons() {
