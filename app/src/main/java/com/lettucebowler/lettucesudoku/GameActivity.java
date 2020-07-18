@@ -106,15 +106,14 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void initialize_members() {
-        problem = new SudokuProblem(order, hint_offset);
-        solving_assistant = new SolvingAssistant(problem);
-
         sudoku_view = findViewById(R.id.board);
-        board_size = ((SudokuState)problem.getCurrentState()).getTiles().length;
-        block_size = (int)Math.sqrt(board_size);
+        board_size = order * order;
+        block_size = order;
         cell_has_been_selected = false;
         button_grid = new SquareTextView[board_size][board_size];
         hints_given = new ArrayList<>();
+
+        new_game();
 
         // highlight colors
         color_correct_bg_light = getColor(R.color.colorCorrectBGLight);
@@ -283,7 +282,6 @@ public class GameActivity extends AppCompatActivity {
     private SquareTextView make_board_button(Context context, int i, int j) {
         SquareTextView board_button = new SquareTextView(context);
         style_board_button(board_button, i, j);
-//        board_button.setTag(new TableData(i, j));
         set_board_button_actions(board_button, i, j);
         return board_button;
     }
@@ -439,6 +437,7 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    // Highlight all cells on board in success_color
     private void highlight_on_success() {
         ArrayList<View> layoutButtons = sudoku_view.getTouchables();
         for (View view : layoutButtons) {
@@ -447,6 +446,8 @@ public class GameActivity extends AppCompatActivity {
     }
 
     // Call to reset board for new game
+    // Sets text of each cell in board to the corresponding cell in the sudoku board.
+    // Resets text color to default.
     private void populate_board() {
         cell_has_been_selected = false;
         for(int i = 0; i < board_size; i++) {
