@@ -28,13 +28,15 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:divider="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@+id/game_buttons"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/board">
 
     </TableLayout>
 
@@ -71,13 +73,24 @@
             android:textColor="@color/colorDefaultText"
             android:textSize="20sp" />
 
-        <ImageButton
+        <!--        <ImageButton-->
+        <!--            android:id="@+id/button_menu"-->
+        <!--            style="?android:attr/buttonBarButtonStyle"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="match_parent"-->
+        <!--            android:layout_weight="1"-->
+        <!--            android:contentDescription="settings button"-->
+        <!--            app:srcCompat="@drawable/hamburger_icon" />-->
+        <view
             android:id="@+id/button_menu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:contentDescription="settings button"
             style="?android:attr/buttonBarButtonStyle"
-            app:srcCompat="@android:drawable/ic_menu_manage" />
+            class="com.lettucebowler.lettucesudoku.GameActivity$SquareImageButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.5"
+            android:contentDescription="settings button"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/hamburger_icon"></view>
 
     </TableRow>
 

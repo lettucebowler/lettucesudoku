@@ -153,14 +153,18 @@ public class GameActivity extends AppCompatActivity {
     private void configure_menu_button() {
         ImageButton button = findViewById(R.id.button_menu);
         button.setOnClickListener(e -> {
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.putExtra("hint_offset", hint_offset);
-            intent.putExtra("do_peer_cells", do_peer_cells);
-            intent.putExtra("do_peer_digits", do_peer_digits);
-            intent.putExtra("do_legality", do_legality);
-            intent.putExtra("game_in_progress", true);
-            startActivityForResult(intent, 0);
+            open_menu();
         });
+    }
+
+    private void open_menu() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("hint_offset", hint_offset);
+        intent.putExtra("do_peer_cells", do_peer_cells);
+        intent.putExtra("do_peer_digits", do_peer_digits);
+        intent.putExtra("do_legality", do_legality);
+        intent.putExtra("game_in_progress", true);
+        startActivityForResult(intent, 0);
     }
 
 
@@ -543,6 +547,29 @@ public class GameActivity extends AppCompatActivity {
         }
 
         public SquareButton(Context context, AttributeSet attrs, int defStyleAttr) {
+            super(context, attrs, defStyleAttr);
+        }
+
+        @Override
+        public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+            super.onMeasure(widthMeasureSpec, widthMeasureSpec);
+            int width = MeasureSpec.getSize(widthMeasureSpec);
+            int height = MeasureSpec.getSize(heightMeasureSpec);
+            int size = Math.min(width, height);
+            setMeasuredDimension(size, size); // make it square
+        }
+    }
+
+    public static class SquareImageButton extends androidx.appcompat.widget.AppCompatImageButton {
+        public SquareImageButton(Context context) {
+            super(context);
+        }
+
+        public SquareImageButton(Context context, AttributeSet attrs) {
+            super(context, attrs);
+        }
+
+        public SquareImageButton(Context context, AttributeSet attrs, int defStyleAttr) {
             super(context, attrs, defStyleAttr);
         }
 

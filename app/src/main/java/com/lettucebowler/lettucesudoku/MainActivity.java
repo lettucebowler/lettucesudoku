@@ -27,12 +27,6 @@ public class MainActivity extends AppCompatActivity {
         peer_digits = findViewById(R.id.peer_digit_toggle);
         color_rule = findViewById(R.id.digit_color_radio);
         difficulty_slider = findViewById(R.id.seekBar_difficulty);
-
-        Button launch_button = findViewById(R.id.button_launch);
-        launch_button.setOnClickListener(e -> {
-            Intent intent = new Intent(this, GameActivity.class);
-            startActivity(write_game_bundle(intent));
-        });
     }
 
     @Override
@@ -58,20 +52,54 @@ public class MainActivity extends AppCompatActivity {
             if(intent.hasExtra("hint_offset")) {
                 difficulty_slider.setProgress(bundle.getInt("hint_offset"));
             }
+        }
+        configure_game_button();
+    }
 
-            if(intent.hasExtra("game_in_progress")) {
-                change_launch_button_to_resume();
-            }
+    @Override
+    public void onBackPressed() {
+        Intent intent = getIntent();
+        if(intent.hasExtra("game_in_progress")) {
+            resume_game();
+        }
+        else {
+            super.onBackPressed();
         }
     }
 
-    private void change_launch_button_to_resume() {
+    private void configure_game_button() {
+        Intent game_intent = getIntent();
+        if(game_intent.hasExtra("game_in_progress")) {
+            set_launch_button_to_resume();
+        }
+        else {
+            set_launch_button_to_start();
+        }
+    }
+
+    private void set_launch_button_to_start() {
+        Button button = findViewById(R.id.button_launch);
+        button.setOnClickListener(e -> {
+            start_game();
+        });
+    }
+
+    private void set_launch_button_to_resume() {
         Button button = findViewById(R.id.button_launch);
         button.setText("resume game");
         button.setOnClickListener(e -> {
-            setResult(Activity.RESULT_OK, write_game_bundle(new Intent()));
-            finish();
+            resume_game();
         });
+    }
+
+    private void resume_game() {
+        setResult(Activity.RESULT_OK, write_game_bundle(new Intent()));
+        finish();
+    }
+
+    private void start_game() {
+        Intent intent = new Intent(this, GameActivity.class);
+        startActivity(write_game_bundle(intent));
     }
 
     private Intent write_game_bundle(Intent intent) {
