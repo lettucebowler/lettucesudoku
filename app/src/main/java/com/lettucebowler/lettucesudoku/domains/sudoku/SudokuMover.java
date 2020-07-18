@@ -34,7 +34,6 @@ public class SudokuMover extends Mover {
 
     private SudokuState tryMove(final int num,final int row, final int col, final State state1) {
         final SudokuState state2 = (SudokuState) state1;
-        final int[][] board  = state2.getTiles();
 
         // Check that input number is valid
         if (num < 0 || num > state2.getTiles().length) {
