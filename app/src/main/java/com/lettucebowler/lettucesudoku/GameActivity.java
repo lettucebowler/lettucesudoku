@@ -332,20 +332,6 @@ public class GameActivity extends AppCompatActivity {
         });
     }
 
-    private void highlight_on_click() {
-        if(cell_has_been_selected) {
-            white_out_board();
-            if(do_peer_cells) {
-                highlight_num_row_col_block();
-            }
-            if(do_peer_digits) {
-                highlight_all_of_num();
-            }
-            button_grid[selected_row][selected_col].setBackgroundColor(color_correct_bg_dark);
-
-        }
-    }
-
     private boolean cell_good(int row, int col) {
         boolean good = true;
         if(get_current_board()[row][col] != 0) {
@@ -359,6 +345,22 @@ public class GameActivity extends AppCompatActivity {
         return good;
     }
 
+    private void highlight_on_click() {
+        if(cell_has_been_selected) {
+            white_out_board();
+            button_grid[selected_row][selected_col].setBackgroundColor(color_correct_bg_dark);
+            if(do_peer_cells) {
+                highlight_num_row_col_block();
+            }
+            if(do_peer_digits) {
+                highlight_all_of_num();
+                if(do_peer_cells) {
+                    button_grid[selected_row][selected_col].setBackgroundColor(board_bg);
+                }
+            }
+        }
+    }
+
     private void highlight_all_of_num() {
         current_board = get_current_board();
         int cell_num = current_board[selected_row][selected_col];
@@ -367,9 +369,11 @@ public class GameActivity extends AppCompatActivity {
                 int cur_cell = current_board[i][j];
                 if(cur_cell == cell_num && cell_num != 0) {
                     button_grid[i][j].setBackgroundColor(color_correct_bg_dark);
-
                 }
             }
+        }
+        if(cell_num != 0) {
+            button_grid[selected_row][selected_col].setBackgroundColor(color_correct_bg_light);
         }
     }
 
@@ -389,6 +393,7 @@ public class GameActivity extends AppCompatActivity {
                 button_grid[start_row + i][start_col + j].setBackgroundColor(color_correct_bg_light);
             }
         }
+        button_grid[selected_row][selected_col].setBackgroundColor(board_bg);
     }
 
     private void update_board() {
