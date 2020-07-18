@@ -31,7 +31,7 @@ public class GameActivity extends AppCompatActivity {
 
     private SudokuProblem problem;
     private SolvingAssistant solving_assistant;
-    private SquareGridLayout sudoku_view;
+    private CustomViews.SquareGridLayout sudoku_view;
     private Button hint_button;
     private int board_size;
     private int block_size;
@@ -56,7 +56,7 @@ public class GameActivity extends AppCompatActivity {
     private boolean do_peer_digits;
     private boolean do_legality;
     private ArrayList<int[]> hints_given;
-    private SquareTextView[][] button_grid;
+    private CustomViews.SquareTextView[][] button_grid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +113,7 @@ public class GameActivity extends AppCompatActivity {
         block_size = order;
         num_extra_hints = 5;
         cell_has_been_selected = false;
-        button_grid = new SquareTextView[board_size][board_size];
+        button_grid = new CustomViews.SquareTextView[board_size][board_size];
         hints_given = new ArrayList<>();
 
         new_game();
@@ -190,20 +190,20 @@ public class GameActivity extends AppCompatActivity {
 
         // Create buttons and add them to the correct row in the layout
         for(int i = 1; i <= board_size + 1; i++) {
-            SquareButton move_button = create_move_button(this, i % (board_size + 1));
+            CustomViews.SquareButton move_button = create_move_button(this, i % (board_size + 1));
             ((TableRow) move_buttons.getChildAt((i - 1) / row_length)).addView(move_button);
         }
     }
 
     @org.jetbrains.annotations.NotNull
-    private SquareButton create_move_button(Context context, int i)  {
-        SquareButton move_button = new SquareButton(context);
+    private CustomViews.SquareButton create_move_button(Context context, int i)  {
+        CustomViews.SquareButton move_button = new CustomViews.SquareButton(context);
         set_move_button_action(move_button, i);
         style_move_button(move_button, i);
         return move_button;
     }
 
-    private void set_move_button_action(@NotNull SquareButton move_button, int i) {
+    private void set_move_button_action(@NotNull CustomViews.SquareButton move_button, int i) {
         move_button.setOnClickListener(e -> {
             if (cell_has_been_selected) {
                 if (initial_board[selected_row][selected_col] == 0 && !given_as_hint(selected_row, selected_col)) {
@@ -213,7 +213,7 @@ public class GameActivity extends AppCompatActivity {
         });
     }
 
-    private void style_move_button(@NotNull SquareButton move_button, int i) {
+    private void style_move_button(@NotNull CustomViews.SquareButton move_button, int i) {
         TableRow.LayoutParams p = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
         p.weight = 1;
         move_button.setLayoutParams(p);
@@ -279,21 +279,21 @@ public class GameActivity extends AppCompatActivity {
     private void initialize_board() {
         sudoku_view.setColumnCount(board_size);
         for(int i = 0; i < board_size * board_size; i++) {
-            SquareTextView gridButton = make_board_button(this, i / board_size, i % board_size);
+            CustomViews.SquareTextView gridButton = make_board_button(this, i / board_size, i % board_size);
             sudoku_view.addView(gridButton);
             button_grid[i / board_size][i % board_size] = gridButton;
         }
         reset_board();
     }
 
-    private SquareTextView make_board_button(Context context, int i, int j) {
-        SquareTextView board_button = new SquareTextView(context);
+    private CustomViews.SquareTextView make_board_button(Context context, int i, int j) {
+        CustomViews.SquareTextView board_button = new CustomViews.SquareTextView(context);
         style_board_button(board_button, i, j);
         set_board_button_actions(board_button, i, j);
         return board_button;
     }
 
-    private void style_board_button(SquareTextView board_button, int i, int j) {
+    private void style_board_button(CustomViews.SquareTextView board_button, int i, int j) {
         GridLayout.LayoutParams p = new GridLayout.LayoutParams(GridLayout.spec(GridLayout.UNDEFINED, GridLayout.FILL, 1f),      GridLayout.spec(GridLayout.UNDEFINED, GridLayout.FILL, 1f));
         p.setMargins(1, 1, 1, 1);
         if(i == 0) {
@@ -315,7 +315,7 @@ public class GameActivity extends AppCompatActivity {
         board_button.setGravity(Gravity.CENTER);
     }
 
-    private void set_board_button_actions(SquareTextView board_button, int i, int j) {
+    private void set_board_button_actions(CustomViews.SquareTextView board_button, int i, int j) {
         board_button.setOnClickListener(e -> {
             if(!problem.success()) {
                 cell_has_been_selected = true;
@@ -402,7 +402,7 @@ public class GameActivity extends AppCompatActivity {
         current_board = get_current_board();
         int to_place = current_board[row][col];
         String buttonText = (to_place == 0) ? "" : String.format(Locale.US, "%d", to_place);
-        SquareTextView grid_cell = button_grid[row][col];
+        CustomViews.SquareTextView grid_cell = button_grid[row][col];
         grid_cell.setText(String.format(buttonText));
         highlight_on_click();
 
@@ -428,7 +428,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void set_board_text_color(int row, int col) {
-        SquareTextView view = button_grid[row][col];
+        CustomViews.SquareTextView view = button_grid[row][col];
         if(cell_good(row, col)) {
             view.setTextColor(color_correct_text);
         }
@@ -511,99 +511,6 @@ public class GameActivity extends AppCompatActivity {
             if (solving_assistant.isProblemSolved()) {
                 Toast.makeText(this, "Puzzle solved!", Toast.LENGTH_SHORT).show();
             }
-        }
-    }
-
-    public static class SquareTextView extends androidx.appcompat.widget.AppCompatTextView{
-        public SquareTextView(Context context) {
-            super(context);
-        }
-
-        public SquareTextView(Context context, AttributeSet attrs) {
-            super(context, attrs);
-        }
-
-        public SquareTextView(Context context, AttributeSet attrs, int defStyleAttr) {
-            super(context, attrs, defStyleAttr);
-        }
-
-        @Override
-        public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            super.onMeasure(widthMeasureSpec, widthMeasureSpec);
-            int width = (int)((double) MeasureSpec.getSize(widthMeasureSpec) / 9.5);
-            int height = (int)((double) MeasureSpec.getSize(widthMeasureSpec) / 9.5);
-            int size = Math.min(width, height);
-            setMeasuredDimension(size, size); // make it square
-        }
-    }
-
-    public static class SquareButton extends androidx.appcompat.widget.AppCompatButton {
-        public SquareButton(Context context) {
-            super(context);
-        }
-
-        public SquareButton(Context context, AttributeSet attrs) {
-            super(context, attrs);
-        }
-
-        public SquareButton(Context context, AttributeSet attrs, int defStyleAttr) {
-            super(context, attrs, defStyleAttr);
-        }
-
-        @Override
-        public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            super.onMeasure(widthMeasureSpec, widthMeasureSpec);
-            int width = MeasureSpec.getSize(widthMeasureSpec);
-            int height = MeasureSpec.getSize(heightMeasureSpec);
-            int size = Math.min(width, height);
-            setMeasuredDimension(size, size); // make it square
-        }
-    }
-
-    public static class SquareImageButton extends androidx.appcompat.widget.AppCompatImageButton {
-        public SquareImageButton(Context context) {
-            super(context);
-        }
-
-        public SquareImageButton(Context context, AttributeSet attrs) {
-            super(context, attrs);
-        }
-
-        public SquareImageButton(Context context, AttributeSet attrs, int defStyleAttr) {
-            super(context, attrs, defStyleAttr);
-        }
-
-        @Override
-        public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            super.onMeasure(widthMeasureSpec, widthMeasureSpec);
-            int width = MeasureSpec.getSize(widthMeasureSpec);
-            int height = MeasureSpec.getSize(heightMeasureSpec);
-            int size = Math.min(width, height);
-            setMeasuredDimension(size, size); // make it square
-        }
-    }
-
-    private static class SquareGridLayout extends GridLayout {
-
-        public SquareGridLayout(Context context) {
-            super(context);
-        }
-
-        public SquareGridLayout(Context context, AttributeSet attrs) {
-            super(context, attrs);
-        }
-
-        public SquareGridLayout(Context context, AttributeSet attrs, int defStyleAttr) {
-            super(context, attrs, defStyleAttr);
-        }
-
-        @Override
-        public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-            super.onMeasure(widthMeasureSpec, widthMeasureSpec);
-            int width = MeasureSpec.getSize(widthMeasureSpec);
-            int height = MeasureSpec.getSize(heightMeasureSpec);
-            int size = Math.min(width, height);
-            setMeasuredDimension(size, size); // make it square
         }
     }
 }
