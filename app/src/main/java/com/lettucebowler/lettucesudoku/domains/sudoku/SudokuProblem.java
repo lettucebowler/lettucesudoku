@@ -61,37 +61,6 @@ public class SudokuProblem extends Problem {
     }
 
     public boolean is_legal(int row, int col) {
-//        boolean legal = true;
-//        int[][] tiles = ((SudokuState) this.getCurrentState()).getTiles();
-//        int cell = tiles[row][col];
-//
-//        // Check row and col
-//        for(int i = 0; i < this.get_sudoku().get_board_size(); i++) {
-//            if(tiles[i][col] == cell) {
-//                legal = false;
-//                break;
-//            }
-//            if(tiles[row][i] == cell) {
-//                legal = false;
-//                break;
-//            }
-//        }
-//
-//        // Check block
-//        // Highlight cells in same block
-//        int block_size = this.get_sudoku().get_cell_size();
-//        int start_row = row / block_size * block_size;
-//        int start_col = col / block_size * block_size;
-//        for(int i = 0; i < block_size; i++) {
-//            for(int j = 0; j < block_size; j++) {
-//               if((start_row + i) != row && (start_col + j) != col && tiles[start_row + i][start_col + j] == cell) {
-//                   legal = false;
-//                   break;
-//               }
-//            }
-//        }
-//
-//        return legal;
         return !(same_in_row(row, col) || same_in_col(row, col) || same_in_block(row, col));
     }
 
@@ -123,9 +92,11 @@ public class SudokuProblem extends Problem {
         int block_size = this.get_sudoku().get_cell_size();
         int start_row = row / block_size * block_size;
         int start_col = col / block_size * block_size;
+//        int start_row = board_size / row;
+//        int start_col = board_size / row;
         for(int i = 0; i < block_size; i++) {
             for(int j = 0; j < block_size; j++) {
-                if(tiles[start_row + i][start_col + j] == tiles[i][j]) {
+                if(tiles[start_row + i][start_col + j] == tiles[row][col]) {
                     count++;
                 }
             }

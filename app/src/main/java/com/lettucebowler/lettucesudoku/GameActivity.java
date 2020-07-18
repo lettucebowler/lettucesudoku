@@ -211,7 +211,7 @@ public class GameActivity extends AppCompatActivity {
     private void set_move_button_action(SquareButton move_button, int i) {
         move_button.setOnClickListener(e -> {
             if (cell_has_been_selected) {
-                if (initial_board[selected_row][selected_col] == 0) {
+                if (initial_board[selected_row][selected_col] == 0 && !given_as_hint(selected_row, selected_col)) {
                     do_move(i, selected_row, selected_col);
                 }
             }
@@ -440,7 +440,7 @@ public class GameActivity extends AppCompatActivity {
         if(problem.is_initial_hint(row, col)) {
             view.setTextColor(color_default_text);
         }
-        if(given_as_hint(row, col, hints_given)) {
+        if(given_as_hint(row, col)) {
             view.setTextColor(color_hint_text);
         }
     }
@@ -465,7 +465,7 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    private boolean given_as_hint(int row, int col, ArrayList<int[]> hints_given) {
+    private boolean given_as_hint(int row, int col) {
         for (int[] hint : hints_given) {
             if (row == hint[0] && col == hint[1]) {
                 return true;
