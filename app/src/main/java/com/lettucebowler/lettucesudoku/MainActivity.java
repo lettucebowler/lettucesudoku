@@ -32,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
         launch_button.setOnClickListener(e -> {
             Intent intent = new Intent(this, GameActivity.class);
             startActivity(write_game_bundle(intent));
-            finish();
         });
     }
 
@@ -45,17 +44,21 @@ public class MainActivity extends AppCompatActivity {
             if(intent.hasExtra("do_peer_cells")) {
                 peer_cells.setChecked(bundle.getBoolean("do_peer_cells"));
             }
+
             if(intent.hasExtra("do_peer_digits")) {
                 peer_digits.setChecked(bundle.getBoolean("do_peer_digits"));
             }
+
             if(intent.hasExtra("do_legality")) {
                 int index = bundle.getBoolean("do_legality") ? 0 : 1;
                 System.out.println(index);
                 ((RadioButton) color_rule.getChildAt(index)).setChecked(true);
             }
+
             if(intent.hasExtra("hint_offset")) {
                 difficulty_slider.setProgress(bundle.getInt("hint_offset"));
             }
+
             if(intent.hasExtra("game_in_progress")) {
                 change_launch_button_to_resume();
             }
@@ -66,14 +69,12 @@ public class MainActivity extends AppCompatActivity {
         Button button = findViewById(R.id.button_launch);
         button.setText("resume game");
         button.setOnClickListener(e -> {
-//            Intent intent = getIntent();
             setResult(Activity.RESULT_OK, write_game_bundle(new Intent()));
             finish();
         });
     }
 
     private Intent write_game_bundle(Intent intent) {
-//        Intent intent = new Intent();
         int hint_offset = difficulty_slider.getProgress();
         intent.putExtra("hint_offset", hint_offset);
 
@@ -87,12 +88,6 @@ public class MainActivity extends AppCompatActivity {
         RadioButton button =  findViewById(id);
         boolean do_legality = button != null && ((RadioButton)color_rule.getChildAt(0)).isChecked();
         intent.putExtra("do_legality", do_legality);
-
-//        System.out.println("write_game_bundle()");
-//        System.out.println("hint offset: " + hint_offset);
-//        System.out.println("do_peer_cells: " + do_peer_cells);
-//        System.out.println("do_peer_digits: " + do_peer_digits);
-//        System.out.println("do_legality: " + do_legality);
 
         return intent;
     }

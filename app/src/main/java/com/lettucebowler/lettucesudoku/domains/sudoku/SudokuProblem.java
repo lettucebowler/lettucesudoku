@@ -92,8 +92,6 @@ public class SudokuProblem extends Problem {
         int block_size = this.get_sudoku().get_cell_size();
         int start_row = row / block_size * block_size;
         int start_col = col / block_size * block_size;
-//        int start_row = board_size / row;
-//        int start_col = board_size / row;
         for(int i = 0; i < block_size; i++) {
             for(int j = 0; j < block_size; j++) {
                 if(tiles[start_row + i][start_col + j] == tiles[row][col]) {
