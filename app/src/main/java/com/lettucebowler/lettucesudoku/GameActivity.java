@@ -22,6 +22,8 @@ import com.lettucebowler.lettucesudoku.domains.sudoku.SudokuProblem;
 import com.lettucebowler.lettucesudoku.domains.sudoku.SudokuState;
 import com.lettucebowler.lettucesudoku.framework.problem.SolvingAssistant;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -34,13 +36,13 @@ public class GameActivity extends AppCompatActivity {
     private int board_size;
     private int block_size;
     private int hint_offset;
+    private int num_extra_hints;
     private int order;
     private int selected_row;
     private int selected_col;
     private int color_correct_bg_light;
     private int color_correct_bg_dark;
     private int board_bg;
-    private int incorrect_bg_dark;
     private int success_bg_dark;
     private int color_default_text;
     private int color_correct_text;
@@ -109,6 +111,7 @@ public class GameActivity extends AppCompatActivity {
         sudoku_view = findViewById(R.id.board);
         board_size = order * order;
         block_size = order;
+        num_extra_hints = 5;
         cell_has_been_selected = false;
         button_grid = new SquareTextView[board_size][board_size];
         hints_given = new ArrayList<>();
@@ -119,7 +122,6 @@ public class GameActivity extends AppCompatActivity {
         color_correct_bg_light = getColor(R.color.colorCorrectBGLight);
         color_correct_bg_dark = getColor(R.color.colorCorrectBGDark);
         board_bg            = getColor(R.color.colorBoardBG);
-        incorrect_bg_dark   = getColor(R.color.colorIncorrectBGDark);
         success_bg_dark     = getColor(R.color.colorSuccessBGDark);
 
 
@@ -189,14 +191,15 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
+    @org.jetbrains.annotations.NotNull
     private SquareButton create_move_button(Context context, int i)  {
-        SquareButton move_button = new SquareButton(this);
+        SquareButton move_button = new SquareButton(context);
         set_move_button_action(move_button, i);
         style_move_button(move_button, i);
         return move_button;
     }
 
-    private void set_move_button_action(SquareButton move_button, int i) {
+    private void set_move_button_action(@NotNull SquareButton move_button, int i) {
         move_button.setOnClickListener(e -> {
             if (cell_has_been_selected) {
                 if (initial_board[selected_row][selected_col] == 0 && !given_as_hint(selected_row, selected_col)) {
@@ -206,7 +209,7 @@ public class GameActivity extends AppCompatActivity {
         });
     }
 
-    private void style_move_button(SquareButton move_button, int i) {
+    private void style_move_button(@NotNull SquareButton move_button, int i) {
         TableRow.LayoutParams p = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
         p.weight = 1;
         move_button.setLayoutParams(p);
@@ -232,8 +235,8 @@ public class GameActivity extends AppCompatActivity {
 
     private void configure_hint_button() {
         hint_button = findViewById(R.id.button_hint);
-        hint_button.setTag(5);
-        String hint_text = String.format(Locale.US, "hint(%d)", (int) hint_button.getTag());
+        hint_button.setTag(num_extra_hints);
+        String hint_text = String.format(Locale.US, "hint(%d)", num_extra_hints);
         hint_button.setText(hint_text);
         hint_button.setEnabled(true);
         hint_button.setOnClickListener(e -> {
