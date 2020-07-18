@@ -69,7 +69,6 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-//        read_bundle(getIntent());
         highlight_on_click();
     }
 
@@ -79,18 +78,11 @@ public class GameActivity extends AppCompatActivity {
         if(resultCode == Activity.RESULT_OK) {
             read_bundle(data);
             update_board();
-//            System.out.println("onActivityResult()");
-//            System.out.println("hint offset: " + hint_offset);
-//            System.out.println("do_peer_cells: " + do_peer_cells);
-//            System.out.println("do_peer_digits: " + do_peer_digits);
-//            System.out.println("do_legality: " + do_legality);
         }
     }
 
     private void read_bundle(Intent intent) {
 
-//        Intent intent = getIntent();
-//        System.out.println("read_bundle()");
         Bundle bundle = intent.getExtras();
         if(bundle != null) {
             if(intent.hasExtra("order")) {
@@ -123,9 +115,6 @@ public class GameActivity extends AppCompatActivity {
         cell_has_been_selected = false;
         button_grid = new SquareTextView[board_size][board_size];
         hints_given = new ArrayList<>();
-//        initial_board = ((SudokuState) problem.getInitialState()).getTiles();
-//        current_board = get_current_board();
-//        final_board = ((SudokuState) problem.getFinalState()).getTiles();
 
         // highlight colors
         color_correct_bg_light = getColor(R.color.colorCorrectBGLight);
