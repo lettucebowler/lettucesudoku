@@ -83,7 +83,12 @@ public class MainActivity extends AppCompatActivity {
     private void startGame() {
         Intent intent = new Intent(this, GameActivity.class);
         writeSharedPrefs();
-        startActivity(intent);
+        if(getIntent().hasExtra("from_game")) {
+            finish();
+        }
+        else {
+            startActivity(intent);
+        }
     }
 
     private void writeSharedPrefs() {

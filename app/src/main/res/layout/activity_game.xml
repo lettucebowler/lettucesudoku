@@ -98,6 +98,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:text="Button"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/game_buttons"
         app:layout_constraintEnd_toEndOf="@+id/game_buttons" />
 

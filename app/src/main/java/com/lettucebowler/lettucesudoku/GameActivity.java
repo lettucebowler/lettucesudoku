@@ -58,7 +58,6 @@ public class GameActivity extends AppCompatActivity {
     private boolean do_peer_digits;
     private boolean do_legality;
     private boolean do_game_save;
-    private String save;
     private ArrayList<int[]> hints_given;
     private CustomViews.SquareTextView[][] button_grid;
 
@@ -168,6 +167,7 @@ public class GameActivity extends AppCompatActivity {
 
     private void openMenu() {
         Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("from_game", true);
         startActivity(intent);
     }
 
