@@ -44,26 +44,26 @@ public class SudokuProblem extends Problem {
         super.setFinalState(new SudokuState(sudoku.getBoardFilled()));
     }
 
-    public Sudoku get_sudoku() {
+    public Sudoku getSudoku() {
         return sudoku;
     }
 
-    public boolean is_initial_hint(int row, int col) {
+    public boolean isInitialHint(int row, int col) {
         return ((SudokuState) this.getInitialState()).getTiles()[row][col] != 0;
     }
 
-    public boolean is_correct(int row, int col) {
+    public boolean isCorrect(int row, int col) {
         return ((SudokuState) this.getCurrentState()).getTiles()[row][col] == ((SudokuState) this.getFinalState()).getTiles()[row][col];
     }
 
-    public boolean is_legal(int row, int col) {
-        return !(same_in_row(row, col) || same_in_col(row, col) || same_in_block(row, col));
+    public boolean isLegal(int row, int col) {
+        return !(checkRowForDuplicates(row, col) || checkColForDuplicates(row, col) || checkBlockForDuplicates(row, col));
     }
 
-    private boolean same_in_row(int row, int col) {
+    private boolean checkRowForDuplicates(int row, int col) {
         int[][] tiles = ((SudokuState) this.getCurrentState()).getTiles();
         int count = 0;
-        for(int i = 0; i < this.get_sudoku().getBoardSize(); i++) {
+        for(int i = 0; i < this.getSudoku().getBoardSize(); i++) {
             if(tiles[row][i] == tiles[row][col]) {
                 count++;
             }
@@ -71,10 +71,10 @@ public class SudokuProblem extends Problem {
         return count > 1;
     }
 
-    private boolean same_in_col(int row, int col) {
+    private boolean checkColForDuplicates(int row, int col) {
         int[][] tiles = ((SudokuState) this.getCurrentState()).getTiles();
         int count = 0;
-        for(int i = 0; i < this.get_sudoku().getBoardSize(); i++) {
+        for(int i = 0; i < this.getSudoku().getBoardSize(); i++) {
             if(tiles[i][col] == tiles[row][col]) {
                 count++;
             }
@@ -82,10 +82,10 @@ public class SudokuProblem extends Problem {
         return count > 1;
     }
 
-    private boolean same_in_block(int row, int col) {
+    private boolean checkBlockForDuplicates(int row, int col) {
         int[][] tiles = ((SudokuState) this.getCurrentState()).getTiles();
         int count = 0;
-        int block_size = this.get_sudoku().getCellSize();
+        int block_size = this.getSudoku().getCellSize();
         int start_row = row / block_size * block_size;
         int start_col = col / block_size * block_size;
         for(int i = 0; i < block_size; i++) {
@@ -98,7 +98,7 @@ public class SudokuProblem extends Problem {
         return count > 1;
     }
 
-    public boolean is_row_complete(int row) {
+    public boolean checkRowCompletion(int row) {
         boolean complete = true;
         int[][] current_board = ((SudokuState) this.getCurrentState()).getTiles();
         int[][] final_board = ((SudokuState) this.getFinalState()).getTiles();
@@ -111,7 +111,7 @@ public class SudokuProblem extends Problem {
         return complete;
     }
 
-    public boolean is_column_complete(int col) {
+    public boolean checkColCompletion(int col) {
         boolean complete = true;
         int[][] current_board = ((SudokuState) this.getCurrentState()).getTiles();
         int[][] final_board = ((SudokuState) this.getFinalState()).getTiles();
@@ -123,7 +123,7 @@ public class SudokuProblem extends Problem {
         return complete;
     }
 
-    public boolean is_block_complete(int row, int col) {
+    public boolean checkBlockCompletion(int row, int col) {
         boolean complete = true;
         int[][] current_board = ((SudokuState) this.getCurrentState()).getTiles();
         int[][] final_board = ((SudokuState) this.getFinalState()).getTiles();

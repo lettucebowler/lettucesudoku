@@ -53,56 +53,56 @@ public class MainActivity extends AppCompatActivity {
                 difficulty_slider.setProgress(bundle.getInt("hint_offset"));
             }
         }
-        configure_game_button();
+        configuteGameButton();
     }
 
     @Override
     public void onBackPressed() {
         Intent intent = getIntent();
         if(intent.hasExtra("game_in_progress")) {
-            resume_game();
+            resumeGame();
         }
         else {
             super.onBackPressed();
         }
     }
 
-    private void configure_game_button() {
+    private void configuteGameButton() {
         Intent game_intent = getIntent();
         if(game_intent.hasExtra("game_in_progress")) {
-            set_launch_button_to_resume();
+            setLaunchButtonToResume();
         }
         else {
-            set_launch_button_to_start();
+            setLaunchButtonToStart();
         }
     }
 
-    private void set_launch_button_to_start() {
+    private void setLaunchButtonToStart() {
         Button button = findViewById(R.id.button_launch);
         button.setOnClickListener(e -> {
-            start_game();
+            startGame();
         });
     }
 
-    private void set_launch_button_to_resume() {
+    private void setLaunchButtonToResume() {
         Button button = findViewById(R.id.button_launch);
         button.setText("resume game");
         button.setOnClickListener(e -> {
-            resume_game();
+            resumeGame();
         });
     }
 
-    private void resume_game() {
-        setResult(Activity.RESULT_OK, write_game_bundle(new Intent()));
+    private void resumeGame() {
+        setResult(Activity.RESULT_OK, writeGameBundle(new Intent()));
         finish();
     }
 
-    private void start_game() {
+    private void startGame() {
         Intent intent = new Intent(this, GameActivity.class);
-        startActivity(write_game_bundle(intent));
+        startActivity(writeGameBundle(intent));
     }
 
-    private Intent write_game_bundle(Intent intent) {
+    private Intent writeGameBundle(Intent intent) {
         int hint_offset = difficulty_slider.getProgress();
         intent.putExtra("hint_offset", hint_offset);
 

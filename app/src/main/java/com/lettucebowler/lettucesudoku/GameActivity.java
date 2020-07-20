@@ -61,28 +61,28 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        read_bundle(getIntent());
+        readBundle(getIntent());
         order = 3;
-        initialize_members();
-        configure_touchables();
+        initializeMembers();
+        configureTouchables();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        highlight_on_click();
+        highlightOnClick(color_correct_bg_light, color_correct_bg_dark, board_bg);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == Activity.RESULT_OK) {
-            read_bundle(data);
-            update_board();
+            readBundle(data);
+            updateBoard();
         }
     }
 
-    private void read_bundle(Intent intent) {
+    private void readBundle(Intent intent) {
 
         Bundle bundle = intent.getExtras();
         if(bundle != null) {
@@ -106,7 +106,7 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    private void initialize_members() {
+    private void initializeMembers() {
         sudoku_view = findViewById(R.id.board);
         board_size = order * order;
         block_size = order;
@@ -115,13 +115,13 @@ public class GameActivity extends AppCompatActivity {
         button_grid = new CustomViews.SquareTextView[board_size][board_size];
         hints_given = new ArrayList<>();
 
-        new_game();
+        newGame();
 
         // highlight colors
         color_correct_bg_light = getColor(R.color.colorCorrectBGLight);
         color_correct_bg_dark = getColor(R.color.colorCorrectBGDark);
-        board_bg            = getColor(R.color.colorBoardBG);
-        success_bg_dark     = getColor(R.color.colorSuccessBGDark);
+        success_bg_dark  = getColor(R.color.colorSuccessBGDark);
+        board_bg = getColor(R.color.colorBoardBG);
 
 
         // text colors
@@ -131,30 +131,30 @@ public class GameActivity extends AppCompatActivity {
         color_hint_text = getColor(R.color.colorHintText);
     }
 
-    private int[][] get_initial_board() {
+    private int[][] getInitialBoard() {
         return ((SudokuState) problem.getInitialState()).getTiles();
     }
 
-    private int[][] get_current_board() {
+    private int[][] getCurrentBoard() {
         return ((SudokuState) problem.getCurrentState()).getTiles();
     }
 
-    private int[][] get_final_board() {
+    private int[][] getFinalBoard() {
         return ((SudokuState) problem.getFinalState()).getTiles();
     }
 
-    private void configure_touchables() {
-        initialize_board();
-        configure_game_buttons();
-        create_move_buttons();
+    private void configureTouchables() {
+        initializeBoard();
+        configureGameButtons();
+        createMoveButtons();
     }
 
-    private void configure_menu_button() {
+    private void configureMenuButton() {
         ImageButton button = findViewById(R.id.button_menu);
-        button.setOnClickListener(e -> open_menu());
+        button.setOnClickListener(e -> openMenu());
     }
 
-    private void open_menu() {
+    private void openMenu() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("hint_offset", hint_offset);
         intent.putExtra("do_peer_cells", do_peer_cells);
@@ -165,13 +165,13 @@ public class GameActivity extends AppCompatActivity {
     }
 
 
-    private void configure_game_buttons() {
-        configure_reset_button();
-        configure_hint_button();
-        configure_menu_button();
+    private void configureGameButtons() {
+        configureResetButton();
+        configureHintButton();
+        configureMenuButton();
     }
 
-    private void create_move_buttons() {
+    private void createMoveButtons() {
         TableLayout move_buttons = findViewById(R.id.move_buttons);
         int row_length = 5;
         int num_rows = (int) Math.ceil((double)(board_size + 1) / (double)row_length);
@@ -187,30 +187,30 @@ public class GameActivity extends AppCompatActivity {
 
         // Create buttons and add them to the correct row in the layout
         for(int i = 1; i <= board_size + 1; i++) {
-            CustomViews.SquareButton move_button = create_move_button(this, i % (board_size + 1));
+            CustomViews.SquareButton move_button = CreateMoveButton(this, i % (board_size + 1));
             ((TableRow) move_buttons.getChildAt((i - 1) / row_length)).addView(move_button);
         }
     }
 
     @org.jetbrains.annotations.NotNull
-    private CustomViews.SquareButton create_move_button(Context context, int i)  {
+    private CustomViews.SquareButton CreateMoveButton(Context context, int i)  {
         CustomViews.SquareButton move_button = new CustomViews.SquareButton(context);
-        set_move_button_action(move_button, i);
-        style_move_button(move_button, i);
+        setMoveButtonAction(move_button, i);
+        styleMoveButton(move_button, i);
         return move_button;
     }
 
-    private void set_move_button_action(@NotNull CustomViews.SquareButton move_button, int i) {
+    private void setMoveButtonAction(@NotNull CustomViews.SquareButton move_button, int i) {
         move_button.setOnClickListener(e -> {
             if (cell_has_been_selected) {
-                if (initial_board[selected_row][selected_col] == 0 && !given_as_hint(selected_row, selected_col)) {
-                    do_move(i, selected_row, selected_col);
+                if (initial_board[selected_row][selected_col] == 0 && !givenAsHint(selected_row, selected_col)) {
+                    doMove(i, selected_row, selected_col);
                 }
             }
         });
     }
 
-    private void style_move_button(@NotNull CustomViews.SquareButton move_button, int i) {
+    private void styleMoveButton(@NotNull CustomViews.SquareButton move_button, int i) {
         TableRow.LayoutParams p = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
         p.weight = 1;
         move_button.setLayoutParams(p);
@@ -225,28 +225,28 @@ public class GameActivity extends AppCompatActivity {
         move_button.setText(buttonText);
     }
 
-    private void configure_reset_button() {
+    private void configureResetButton() {
         Button reset_button = findViewById(R.id.button_reset);
         reset_button.setOnClickListener(View -> {
             reset_button.setEnabled(false);
-            reset_board();
+            resetBoard();
             reset_button.setEnabled(true);
         });
     }
 
-    private void configure_hint_button() {
+    private void configureHintButton() {
         hint_button = findViewById(R.id.button_hint);
         hint_button.setTag(num_extra_hints);
         String hint_text = String.format(Locale.US, "hint(%d)", num_extra_hints);
         hint_button.setText(hint_text);
         hint_button.setEnabled(true);
-        hint_button.setOnClickListener(e -> give_hint());
+        hint_button.setOnClickListener(e -> giveHint());
     }
 
-    private void give_hint() {
+    private void giveHint() {
         // Only run if problem is not yet solved
         if (!problem.success()) {
-            current_board = get_current_board();
+            current_board = getCurrentBoard();
             int i;
             int j;
             int move_num;
@@ -255,7 +255,7 @@ public class GameActivity extends AppCompatActivity {
                 j = Sudoku.getRandom(final_board.length);
                 move_num = final_board[i][j];
             } while (current_board[i][j] != 0);
-            do_move(move_num, i, j);
+            doMove(move_num, i, j);
             int[] hint = {i, j};
             hints_given.add(hint);
             hint_button.setTag(((int) hint_button.getTag()) - 1);
@@ -264,31 +264,31 @@ public class GameActivity extends AppCompatActivity {
             }
             final String finalHint_text = String.format(Locale.US, "hint(%d)", (int) hint_button.getTag());
             hint_button.setText(finalHint_text);
-            update_cell(i, j);
+            updateCell(i, j);
         }
         else {
             Toast.makeText(this, "Puzzle already solved!", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void initialize_board() {
+    private void initializeBoard() {
         sudoku_view.setColumnCount(board_size);
         for(int i = 0; i < board_size * board_size; i++) {
-            CustomViews.SquareTextView gridButton = make_board_button(this, i / board_size, i % board_size);
+            CustomViews.SquareTextView gridButton = makeBoardButton(this, i / board_size, i % board_size);
             sudoku_view.addView(gridButton);
             button_grid[i / board_size][i % board_size] = gridButton;
         }
-        reset_board();
+        resetBoard();
     }
 
-    private CustomViews.SquareTextView make_board_button(Context context, int i, int j) {
+    private CustomViews.SquareTextView makeBoardButton(Context context, int i, int j) {
         CustomViews.SquareTextView board_button = new CustomViews.SquareTextView(context);
-        style_board_button(board_button, i, j);
-        set_board_button_actions(board_button, i, j);
+        styleBoardButton(board_button, i, j);
+        setBoardButtonActions(board_button, i, j);
         return board_button;
     }
 
-    private void style_board_button(CustomViews.SquareTextView board_button, int i, int j) {
+    private void styleBoardButton(CustomViews.SquareTextView board_button, int i, int j) {
         GridLayout.LayoutParams p = new GridLayout.LayoutParams(GridLayout.spec(GridLayout.UNDEFINED, GridLayout.FILL, 1f),      GridLayout.spec(GridLayout.UNDEFINED, GridLayout.FILL, 1f));
         p.setMargins(1, 1, 1, 1);
         if(i == 0) {
@@ -310,39 +310,39 @@ public class GameActivity extends AppCompatActivity {
         board_button.setGravity(Gravity.CENTER);
     }
 
-    private void set_board_button_actions(CustomViews.SquareTextView board_button, int i, int j) {
+    private void setBoardButtonActions(CustomViews.SquareTextView board_button, int i, int j) {
         board_button.setOnClickListener(e -> {
             if(!problem.success()) {
                 cell_has_been_selected = true;
                 selected_row = i;
                 selected_col = j;
-                highlight_on_click();
+                highlightOnClick(color_correct_bg_light, color_correct_bg_dark, board_bg);
             }
         });
     }
 
-    private boolean cell_good(int row, int col) {
+    private boolean cellGood(int row, int col) {
         boolean good = true;
-        if(get_current_board()[row][col] != 0) {
+        if(getCurrentBoard()[row][col] != 0) {
             if(do_legality) {
-                good = problem.is_legal(row, col);
+                good = problem.isLegal(row, col);
             }
             else {
-                good = problem.is_correct(row, col);
+                good = problem.isCorrect(row, col);
             }
         }
         return good;
     }
 
-    private void highlight_on_click() {
+    private void highlightOnClick(int light_color, int dark_color, int selected_color) {
         if(cell_has_been_selected) {
-            white_out_board();
+            whiteOutBoard();
             button_grid[selected_row][selected_col].setBackgroundColor(color_correct_bg_dark);
             if(do_peer_cells) {
-                highlight_num_row_col_block();
+                highlightPeerCells(light_color, selected_color);
             }
             if(do_peer_digits) {
-                highlight_all_of_num();
+                highlightPeerDigits(dark_color, light_color);
                 if(do_peer_cells) {
                     button_grid[selected_row][selected_col].setBackgroundColor(board_bg);
                 }
@@ -350,28 +350,28 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    private void highlight_all_of_num() {
-        current_board = get_current_board();
+    private void highlightPeerDigits(int peer_color, int selected_color) {
+        current_board = getCurrentBoard();
         int cell_num = current_board[selected_row][selected_col];
-        for(int i = 0; i < board_size; i++) {
-            for(int j = 0; j < board_size; j++) {
-                int cur_cell = current_board[i][j];
-                if(cur_cell == cell_num && cell_num != 0) {
-                    button_grid[i][j].setBackgroundColor(color_correct_bg_dark);
+        if(cell_num != 0) {
+            for(int i = 0; i < board_size; i++) {
+                for(int j = 0; j < board_size; j++) {
+                    int cur_cell = current_board[i][j];
+                    if(cur_cell == cell_num) {
+                        button_grid[i][j].setBackgroundColor(color_correct_bg_dark);
+                    }
                 }
             }
-        }
-        if(cell_num != 0) {
             button_grid[selected_row][selected_col].setBackgroundColor(color_correct_bg_light);
         }
     }
 
-    private void highlight_num_row_col_block() {
-        current_board = get_current_board();
+    private void highlightPeerCells(int peer_color, int selected_color) {
+        current_board = getCurrentBoard();
         // Highlight cells in came row or column
         for(int i = 0; i < board_size; i++) {
-            button_grid[selected_row][i].setBackgroundColor(color_correct_bg_light);
-            button_grid[i][selected_col].setBackgroundColor(color_correct_bg_light);
+            button_grid[selected_row][i].setBackgroundColor(peer_color);
+            button_grid[i][selected_col].setBackgroundColor(peer_color);
         }
 
         // Highlight cells in same block
@@ -379,78 +379,78 @@ public class GameActivity extends AppCompatActivity {
         int start_col = selected_col / block_size * block_size;
         for(int i = 0; i < block_size; i++) {
             for(int j = 0; j < block_size; j++) {
-                button_grid[start_row + i][start_col + j].setBackgroundColor(color_correct_bg_light);
+                button_grid[start_row + i][start_col + j].setBackgroundColor(peer_color);
             }
         }
-        button_grid[selected_row][selected_col].setBackgroundColor(board_bg);
+        button_grid[selected_row][selected_col].setBackgroundColor(selected_color);
     }
 
-    private void update_board() {
+    private void updateBoard() {
         for(int i = 0; i < board_size; i++) {
             for(int j = 0; j < board_size; j++) {
-                update_cell(i, j);
+                updateCell(i, j);
             }
         }
     }
 
-    private void update_cell(int row, int col) {
-        current_board = get_current_board();
+    private void updateCell(int row, int col) {
+        current_board = getCurrentBoard();
         int to_place = current_board[row][col];
         String buttonText = (to_place == 0) ? "" : String.format(Locale.US, "%d", to_place);
         CustomViews.SquareTextView grid_cell = button_grid[row][col];
         grid_cell.setText(buttonText);
-        highlight_on_click();
+        highlightOnClick(color_correct_bg_light, color_correct_bg_dark, board_bg);
 
         if(do_legality) {
-            recolor_board();
+            recolorDigits();
         }
         else {
-            set_board_text_color(row, col);
+            recolorDigit(row, col);
         }
 
         if (problem.success()) {
-            highlight_on_success();
+            highlightBoard(success_bg_dark);
             hint_button.setEnabled(false);
         }
     }
 
-    private void recolor_board() {
+    private void recolorDigits() {
         for(int i = 0; i < board_size; i++) {
             for(int j = 0; j < board_size; j++) {
-                set_board_text_color(i, j);
+                recolorDigit(i, j);
             }
         }
     }
 
-    private void set_board_text_color(int row, int col) {
+    private void recolorDigit(int row, int col) {
         CustomViews.SquareTextView view = button_grid[row][col];
-        if(cell_good(row, col)) {
+        if(cellGood(row, col)) {
             view.setTextColor(color_correct_text);
         }
         else {
             view.setTextColor(color_incorrect_text);
         }
 
-        if(problem.is_initial_hint(row, col)) {
+        if(problem.isInitialHint(row, col)) {
             view.setTextColor(color_default_text);
         }
-        if(given_as_hint(row, col)) {
+        if(givenAsHint(row, col)) {
             view.setTextColor(color_hint_text);
         }
     }
 
     // Highlight all cells on board in success_color
-    private void highlight_on_success() {
+    private void highlightBoard(int color) {
         ArrayList<View> layoutButtons = sudoku_view.getTouchables();
         for (View view : layoutButtons) {
-            view.setBackgroundColor(success_bg_dark);
+            view.setBackgroundColor(color);
         }
     }
 
     // Call to reset board for new game
     // Sets text of each cell in board to the corresponding cell in the sudoku board.
     // Resets text color to default.
-    private void populate_board() {
+    private void populateBoard() {
         cell_has_been_selected = false;
         for(int i = 0; i < board_size; i++) {
             for(int j = 0; j < board_size; j++) {
@@ -462,7 +462,7 @@ public class GameActivity extends AppCompatActivity {
         }
     }
 
-    private boolean given_as_hint(int row, int col) {
+    private boolean givenAsHint(int row, int col) {
         for (int[] hint : hints_given) {
             if (row == hint[0] && col == hint[1]) {
                 return true;
@@ -471,34 +471,34 @@ public class GameActivity extends AppCompatActivity {
         return false;
     }
 
-    private void white_out_board() {
+    private void whiteOutBoard() {
         ArrayList<View> cells = sudoku_view.getTouchables();
         for (View cell : cells) {
             cell.setBackgroundColor(board_bg);
         }
     }
 
-    private void new_game() {
+    private void newGame() {
         problem = new SudokuProblem(order, hint_offset);
         solving_assistant = new SolvingAssistant(problem);
-        initial_board = get_initial_board();
-        final_board = get_final_board();
+        initial_board = getInitialBoard();
+        final_board = getFinalBoard();
         hints_given.clear();
     }
 
-    private void reset_board() {
-        new_game();
-        white_out_board();
-        configure_hint_button();
-        populate_board();
+    private void resetBoard() {
+        newGame();
+        whiteOutBoard();
+        configureHintButton();
+        populateBoard();
     }
 
-    private void do_move(int num, int row, int col) {
+    private void doMove(int num, int row, int col) {
         if(!problem.success()) {
             String move = "Place " + num + " at " + row + " " + col;
             solving_assistant.tryMove(move);
             if (solving_assistant.isMoveLegal()) {
-                update_cell(row, col);
+                updateCell(row, col);
             }
             else {
                 Toast.makeText(this, "Illegal move.", Toast.LENGTH_SHORT).show();
