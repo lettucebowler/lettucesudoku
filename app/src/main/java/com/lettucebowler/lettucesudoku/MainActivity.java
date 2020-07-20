@@ -71,12 +71,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void configureLaunchButton() {
         Button button = findViewById(R.id.button_launch);
-        if(game_in_progress) {
-            button.setText("Resume Game");
-        }
-        else {
-            button.setText("Start Game");
-        }
         button.setOnClickListener(e -> startGame());
     }
 

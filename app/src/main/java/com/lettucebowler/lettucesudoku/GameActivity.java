@@ -82,11 +82,11 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        readSharedPrefs();
         highlightOnClick(color_correct_bg_light, color_correct_bg_dark, board_bg);
     }
 
     private void readSharedPrefs() {
-
         boolean DEFAULT_DO_PEER_CELLS = true;
         boolean DEFAULT_DO_PEER_DIGITS = true;
         boolean DEFAULT_DO_LEGALITY = false;
@@ -319,12 +319,10 @@ public class GameActivity extends AppCompatActivity {
 
     private void setBoardButtonActions(CustomViews.SquareTextView board_button, int i, int j) {
         board_button.setOnClickListener(e -> {
-            if(!problem.success()) {
-                cell_has_been_selected = true;
-                selected_row = i;
-                selected_col = j;
-                highlightOnClick(color_correct_bg_light, color_correct_bg_dark, board_bg);
-            }
+            cell_has_been_selected = true;
+            selected_row = i;
+            selected_col = j;
+            highlightOnClick(color_correct_bg_light, color_correct_bg_dark, board_bg);
         });
     }
 
@@ -343,15 +341,17 @@ public class GameActivity extends AppCompatActivity {
 
     private void highlightOnClick(int light_color, int dark_color, int selected_color) {
         if(cell_has_been_selected) {
-            whiteOutBoard();
-            button_grid[selected_row][selected_col].setBackgroundColor(color_correct_bg_dark);
-            if(do_peer_cells) {
-                highlightPeerCells(light_color, selected_color);
-            }
-            if(do_peer_digits) {
-                highlightPeerDigits(dark_color, light_color);
+            if(!problem.success()) {
+                highlightBoard(selected_color);
+                button_grid[selected_row][selected_col].setBackgroundColor(color_correct_bg_dark);
                 if(do_peer_cells) {
-                    button_grid[selected_row][selected_col].setBackgroundColor(board_bg);
+                    highlightPeerCells(light_color, selected_color);
+                }
+                if(do_peer_digits) {
+                    highlightPeerDigits(dark_color, light_color);
+                    if(do_peer_cells) {
+                        button_grid[selected_row][selected_col].setBackgroundColor(selected_color);
+                    }
                 }
             }
         }
@@ -365,11 +365,11 @@ public class GameActivity extends AppCompatActivity {
                 for(int j = 0; j < board_size; j++) {
                     int cur_cell = current_board[i][j];
                     if(cur_cell == cell_num) {
-                        button_grid[i][j].setBackgroundColor(color_correct_bg_dark);
+                        button_grid[i][j].setBackgroundColor(peer_color);
                     }
                 }
             }
-            button_grid[selected_row][selected_col].setBackgroundColor(color_correct_bg_light);
+            button_grid[selected_row][selected_col].setBackgroundColor(selected_color);
         }
     }
 
@@ -473,13 +473,6 @@ public class GameActivity extends AppCompatActivity {
         return false;
     }
 
-    private void whiteOutBoard() {
-        ArrayList<View> cells = sudoku_view.getTouchables();
-        for (View cell : cells) {
-            cell.setBackgroundColor(board_bg);
-        }
-    }
-
     // Generate new sudoku board and reset game state
     private void newGame() {
         problem = new SudokuProblem(order, hint_offset);
@@ -551,7 +544,7 @@ public class GameActivity extends AppCompatActivity {
             resumeSavedGame();
         }
         do_game_save = true;
-        whiteOutBoard();
+        highlightBoard(board_bg);
         configureHintButton();
         populateBoard();
         recolorDigits();
