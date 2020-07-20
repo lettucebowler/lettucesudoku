@@ -50,6 +50,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        writeSharedPrefs();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         readSharedPrefs();
