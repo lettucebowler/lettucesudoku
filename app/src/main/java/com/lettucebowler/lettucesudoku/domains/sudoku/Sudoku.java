@@ -7,16 +7,16 @@ public class Sudoku {
     private int board_size;
     private int cell_size;
     private int hint_offset;
-    private int[][] board_filled;
+    private int[][] final_board;
     private int[][] board_temp;
-    private int[][] board_emptied;
+    private int[][] initial_board;
 
     public Sudoku(int cell_size) {
         this.cell_size = cell_size;
         this.board_size = cell_size * cell_size;
         this.board_size = cell_size * cell_size;
         this.hint_offset = 0;
-        this.board_filled = new int[board_size][board_size];
+        this.final_board = new int[board_size][board_size];
         this.board_temp = new int[board_size][board_size];
         this.generateFilled();
         this.scrambleBoard();
@@ -27,19 +27,27 @@ public class Sudoku {
         this.cell_size = cell_size;
         this.board_size = cell_size * cell_size;
         this.hint_offset = hint_offset;
-        this.board_filled = new int[board_size][board_size];
+        this.final_board = new int[board_size][board_size];
         this.board_temp = new int[board_size][board_size];
         this.generateFilled();
         this.scrambleBoard();
         this.preparePuzzle();
     }
 
+    public Sudoku(int cell_size, int hint_offset, int[][] initial_board, int[][] final_board) {
+        this.cell_size = cell_size;
+        this.board_size = cell_size * cell_size;
+        this.hint_offset = hint_offset;
+        this.final_board = final_board;
+        this.initial_board = initial_board;
+    }
+
     public int[][] getBoardFilled() {
-        return this.board_filled;
+        return this.final_board;
     }
 
     public int[][] getBoardEmptied() {
-        return this.board_emptied;
+        return this.initial_board;
     }
 
     public int getBoardSize() {
@@ -50,7 +58,7 @@ public class Sudoku {
 
     public void generateFilled() {
         this.board_size = this.cell_size * this.cell_size;
-        this.board_filled = new int[this.board_size][this.board_size];
+        this.final_board = new int[this.board_size][this.board_size];
         int k ;
         int n = 1;
 
@@ -62,7 +70,7 @@ public class Sudoku {
                     k = 1;
                 }
 
-                this.board_filled[i][j] = k;
+                this.final_board[i][j] = k;
                 k++;
             }
 
@@ -115,9 +123,9 @@ public class Sudoku {
     private void swapRows(int row1, int row2) {
         int temp;
         for(int i = 0; i < this.board_size; i++) {
-            temp = this.board_filled[row1][i];
-            this.board_filled[row1][i] = this.board_filled[row2][i];
-            this.board_filled[row2][i] = temp;
+            temp = this.final_board[row1][i];
+            this.final_board[row1][i] = this.final_board[row2][i];
+            this.final_board[row2][i] = temp;
         }
     }
 
@@ -125,9 +133,9 @@ public class Sudoku {
     private void swapCols(int col1, int col2) {
         int temp;
         for(int i = 0; i < this.board_size; i++) {
-            temp = this.board_filled[i][col1];
-            this.board_filled[i][col1] = this.board_filled[i][col2];
-            this.board_filled[i][col2] = temp;
+            temp = this.final_board[i][col1];
+            this.final_board[i][col1] = this.final_board[i][col2];
+            this.final_board[i][col2] = temp;
         }
     }
 
@@ -154,9 +162,9 @@ public class Sudoku {
 
     // Takes a complete sudoku board and removes cells to create a sudoku puzzle
     private void preparePuzzle() {
-        this.board_emptied = new int[this.board_size][this.board_size];
+        this.initial_board = new int[this.board_size][this.board_size];
         for (int row = 0; row < this.board_size; row++) {
-            System.arraycopy(this.board_filled[row], 0, this.board_temp[row], 0, this.board_size);
+            System.arraycopy(this.final_board[row], 0, this.board_temp[row], 0, this.board_size);
         }
         int num_removed = 0;
         int max_remove;
@@ -211,9 +219,9 @@ public class Sudoku {
         } while (num_removed < max_remove && valid_positions.size() > 0);
         // System.out.println(String.format(Locale.US, "Prep iterations: %d", iterations));
 
-        this.board_emptied = new int[this.board_size][this.board_size];
+        this.initial_board = new int[this.board_size][this.board_size];
         for (int i = 0; i < this.board_size; i++) {
-            System.arraycopy(board_temp[i], 0, this.board_emptied[i], 0, this.board_size);
+            System.arraycopy(board_temp[i], 0, this.initial_board[i], 0, this.board_size);
         }
     }
 

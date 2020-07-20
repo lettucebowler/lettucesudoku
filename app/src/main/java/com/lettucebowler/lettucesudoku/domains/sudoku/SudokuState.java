@@ -40,7 +40,7 @@ public class SudokuState implements State {
      * A SudokuState constructor that takes a given state, a number, and it's position represented
      * as a row and column integer.
      * and returns a new state with given number in given position, overwriting previous tiles
-     * if necessary. The original puzzl state is not changed.
+     * if necessary. The original puzzle state is not changed.
      *
      * @param state an existing puzzle state
      * @throws ArrayIndexOutOfBoundsException if either location is invalid for
