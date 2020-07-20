@@ -57,6 +57,7 @@ public class GameActivity extends AppCompatActivity {
     private boolean do_peer_cells;
     private boolean do_peer_digits;
     private boolean do_legality;
+    private boolean do_game_save;
     private String save;
     private ArrayList<int[]> hints_given;
     private CustomViews.SquareTextView[][] button_grid;
@@ -65,7 +66,7 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        readBundle(getIntent());
+        readSharedPrefs();
         order = 3;
         initializeMembers();
         configureTouchables();
@@ -74,7 +75,9 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        saveGame();
+        if(do_game_save) {
+            saveGame();
+        }
     }
 
     @Override
@@ -83,42 +86,32 @@ public class GameActivity extends AppCompatActivity {
         highlightOnClick(color_correct_bg_light, color_correct_bg_dark, board_bg);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == Activity.RESULT_OK) {
-            readBundle(data);
-            updateBoard();
-        }
-    }
+    private void readSharedPrefs() {
 
-    private void readBundle(Intent intent) {
+        boolean DEFAULT_DO_PEER_CELLS = true;
+        boolean DEFAULT_DO_PEER_DIGITS = true;
+        boolean DEFAULT_DO_LEGALITY = false;
+        int DEFAULT_HINT_OFFSET = 10;
 
-        Bundle bundle = intent.getExtras();
-        if(bundle != null) {
-            if(intent.hasExtra("order")) {
-                int bundle_order = bundle.getInt("order");
-                order = (bundle_order == 2 || bundle_order == 3) ? bundle_order : 3;
-            }
-            if(intent.hasExtra("hint_offset")) {
-                int hints = bundle.getInt("hint_offset");
-                hint_offset = 0 <= hints && hints <= 51 ? hints : 10;
-            }
-            if(intent.hasExtra("do_peer_cells")) {
-                do_peer_cells = bundle.getBoolean("do_peer_cells");
-            }
-            if(intent.hasExtra("do_peer_digits")) {
-                do_peer_digits = bundle.getBoolean("do_peer_digits");
-            }
-            if(intent.hasExtra("do_legality")) {
-                do_legality = bundle.getBoolean("do_legality");
-            }
-            save = "none";
-            if(intent.hasExtra("current_board")) {
-                System.out.println("has game");
-                save = bundle.getString("current_board");
-            }
-        }
+        SharedPreferences mPrefs = getSharedPreferences("system", MODE_PRIVATE);
+        Gson gson = new Gson();
+
+        String do_peer_cells_string = mPrefs.getString("do_peer_cells", "");
+        assert do_peer_cells_string != null;
+        do_peer_cells = do_peer_cells_string.equals("") ? DEFAULT_DO_PEER_CELLS : gson.fromJson(do_peer_cells_string, boolean.class);
+
+        String do_peer_digits_string = mPrefs.getString("do_peer_digits", "");
+        assert do_peer_digits_string != null;
+        do_peer_digits = do_peer_digits_string.equals("") ? DEFAULT_DO_PEER_DIGITS : gson.fromJson(do_peer_digits_string, boolean.class);
+
+
+        String do_legality_string = mPrefs.getString("do_legality", "");
+        assert do_legality_string != null;
+        do_legality = do_legality_string.equals("") ? DEFAULT_DO_LEGALITY : gson.fromJson(do_legality_string, boolean.class);
+
+        String hint_offset_string = mPrefs.getString("hint_offset", "");
+        assert hint_offset_string != null;
+        hint_offset = hint_offset_string.equals("") ? DEFAULT_HINT_OFFSET : gson.fromJson(hint_offset_string, int.class);
     }
 
     private void initializeMembers() {
@@ -129,13 +122,6 @@ public class GameActivity extends AppCompatActivity {
         cell_has_been_selected = false;
         button_grid = new CustomViews.SquareTextView[board_size][board_size];
         hints_given = new ArrayList<>();
-
-        if(save.equals("none")) {
-            newGame();
-        }
-        else {
-            resumeSavedGame();
-        }
 
         // highlight colors
         color_correct_bg_light = getColor(R.color.colorCorrectBGLight);
@@ -166,13 +152,13 @@ public class GameActivity extends AppCompatActivity {
     private void configureTouchables() {
         initializeBoard();
         configureGameButtons();
-        configureSaveButton();
         createMoveButtons();
+        configureSolveButton();
     }
 
-    private void configureSaveButton() {
-        Button save_button = findViewById(R.id.button_save);
-        save_button.setOnClickListener(e -> saveGame());
+    private void configureSolveButton() {
+        Button button = findViewById(R.id.button_solve);
+        button.setOnClickListener(e -> solveGame());
     }
 
     private void configureMenuButton() {
@@ -182,12 +168,7 @@ public class GameActivity extends AppCompatActivity {
 
     private void openMenu() {
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("hint_offset", hint_offset);
-        intent.putExtra("do_peer_cells", do_peer_cells);
-        intent.putExtra("do_peer_digits", do_peer_digits);
-        intent.putExtra("do_legality", do_legality);
-        intent.putExtra("game_in_progress", true);
-        startActivityForResult(intent, 0);
+        startActivity(intent);
     }
 
 
@@ -255,8 +236,7 @@ public class GameActivity extends AppCompatActivity {
         Button reset_button = findViewById(R.id.button_reset);
         reset_button.setOnClickListener(View -> {
             reset_button.setEnabled(false);
-            save = "none";
-            resetBoard();
+            resetBoard(true);
             reset_button.setEnabled(true);
         });
     }
@@ -305,7 +285,7 @@ public class GameActivity extends AppCompatActivity {
             sudoku_view.addView(gridButton);
             button_grid[i / board_size][i % board_size] = gridButton;
         }
-        resetBoard();
+        resetBoard(false);
     }
 
     private CustomViews.SquareTextView makeBoardButton(Context context, int i, int j) {
@@ -434,11 +414,6 @@ public class GameActivity extends AppCompatActivity {
         else {
             recolorDigit(row, col);
         }
-
-        if (problem.success()) {
-            highlightBoard(success_bg_dark);
-            hint_button.setEnabled(false);
-        }
     }
 
     private void recolorDigits() {
@@ -555,13 +530,27 @@ public class GameActivity extends AppCompatActivity {
         prefsEditor.apply();
     }
 
-    private void resetBoard() {
-        if(save.equals("none")) {
+    private void deleteGame() {
+        SharedPreferences mPrefs = getSharedPreferences("system", MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        prefsEditor.remove("initial_board");
+        prefsEditor.remove("current_board");
+        prefsEditor.remove("final_board");
+        prefsEditor.remove("hints_given");
+        prefsEditor.apply();
+    }
+
+    private void resetBoard(boolean button_pressed) {
+        SharedPreferences  mPrefs = getSharedPreferences("system", MODE_PRIVATE);
+        String current = mPrefs.getString("current_board", "");
+        assert current != null;
+        if(current.equals("") || button_pressed) {
             newGame();
         }
         else {
             resumeSavedGame();
         }
+        do_game_save = true;
         whiteOutBoard();
         configureHintButton();
         populateBoard();
@@ -580,6 +569,25 @@ public class GameActivity extends AppCompatActivity {
             }
             if (solving_assistant.isProblemSolved()) {
                 Toast.makeText(this, "Puzzle solved!", Toast.LENGTH_SHORT).show();
+                highlightBoard(success_bg_dark);
+                hint_button.setEnabled(false);
+                deleteGame();
+                do_game_save = false;
+            }
+        }
+    }
+
+    private void solveGame() {
+        for(int i = 0; i < board_size; i++) {
+            for(int j = 0; j < board_size; j++) {
+                if(getCurrentBoard()[i][j] == 0) {
+                    for(int k = 1; k <= board_size; k++) {
+                        doMove(k, i, j);
+                        if(problem.isCorrect(i, j)) {
+                            break;
+                        }
+                    }
+                }
             }
         }
     }
