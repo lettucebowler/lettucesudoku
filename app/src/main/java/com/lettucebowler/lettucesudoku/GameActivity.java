@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -152,9 +151,7 @@ public class GameActivity extends AppCompatActivity {
 
     private void configure_menu_button() {
         ImageButton button = findViewById(R.id.button_menu);
-        button.setOnClickListener(e -> {
-            open_menu();
-        });
+        button.setOnClickListener(e -> open_menu());
     }
 
     private void open_menu() {
@@ -243,9 +240,7 @@ public class GameActivity extends AppCompatActivity {
         String hint_text = String.format(Locale.US, "hint(%d)", num_extra_hints);
         hint_button.setText(hint_text);
         hint_button.setEnabled(true);
-        hint_button.setOnClickListener(e -> {
-            give_hint();
-        });
+        hint_button.setOnClickListener(e -> give_hint());
     }
 
     private void give_hint() {
@@ -256,8 +251,8 @@ public class GameActivity extends AppCompatActivity {
             int j;
             int move_num;
             do {
-                i = Sudoku.get_random(final_board.length);
-                j = Sudoku.get_random(final_board.length);
+                i = Sudoku.getRandom(final_board.length);
+                j = Sudoku.getRandom(final_board.length);
                 move_num = final_board[i][j];
             } while (current_board[i][j] != 0);
             do_move(move_num, i, j);
@@ -267,7 +262,7 @@ public class GameActivity extends AppCompatActivity {
             if ((int) hint_button.getTag() == 0) {
                 hint_button.setEnabled(false);
             }
-            final String finalHint_text = String.format(Locale.US, "hint(%d)", (int)hint_button.getTag());
+            final String finalHint_text = String.format(Locale.US, "hint(%d)", (int) hint_button.getTag());
             hint_button.setText(finalHint_text);
             update_cell(i, j);
         }
@@ -403,7 +398,7 @@ public class GameActivity extends AppCompatActivity {
         int to_place = current_board[row][col];
         String buttonText = (to_place == 0) ? "" : String.format(Locale.US, "%d", to_place);
         CustomViews.SquareTextView grid_cell = button_grid[row][col];
-        grid_cell.setText(String.format(buttonText));
+        grid_cell.setText(buttonText);
         highlight_on_click();
 
         if(do_legality) {
