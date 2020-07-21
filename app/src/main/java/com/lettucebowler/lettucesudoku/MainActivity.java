@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         do_peer_digits = DEFAULT_DO_PEER_DIGITS;
         do_legality = DEFAULT_DO_LEGALITY;
         hint_offset = DEFAULT_HINT_OFFSET;
+        game_in_progress = DEFAULT_GAME_IN_PROGRESS;
     }
 
     @Override
@@ -71,18 +72,22 @@ public class MainActivity extends AppCompatActivity {
 
     private void configureLaunchButton() {
         Button button = findViewById(R.id.button_launch);
+        if(game_in_progress) {
+            button.setText(getString(R.string.button_resume));
+        }
+        else {
+            button.setText(getString(R.string.button_start));
+        }
         button.setOnClickListener(e -> startGame());
     }
 
     private void startGame() {
         Intent intent = new Intent(this, GameActivity.class);
         writeSharedPrefs();
-        if(getIntent().hasExtra("from_game")) {
-            finish();
-        }
-        else {
+        if (!getIntent().hasExtra("from_game")) {
             startActivity(intent);
         }
+        finish();
     }
 
     private void writeSharedPrefs() {
@@ -119,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
 
         String current_board_string = mPrefs.getString("current_board", "");
         assert current_board_string != null;
-        game_in_progress = !current_board_string.equals("");
+        game_in_progress = !current_board_string.equals("") || DEFAULT_GAME_IN_PROGRESS;
     }
 
     private void applySharedPrefs() {
