@@ -14,7 +14,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:text="Start Game"
+        android:text="@string/button_start"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Highlight Peer Cells"
+            android:text="@string/peer_cell_label"
             android:textSize="18sp" />
 
         <ToggleButton
@@ -43,8 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:foregroundTint="#D12424"
-            android:text="ToggleButton" />
+            android:foregroundTint="#D12424" />
     </TableRow>
 
     <TableRow
@@ -61,15 +60,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Highlight Peer Digits"
+            android:text="@string/peer_digit_label"
             android:textSize="18sp" />
 
         <ToggleButton
             android:id="@+id/peer_digit_toggle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="ToggleButton" />
+            android:checked="true" />
     </TableRow>
 
     <TableRow
@@ -87,7 +85,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Digit color parameter"
+            android:text="@string/color_rule_label"
             android:textSize="18sp" />
 
         <RadioGroup
@@ -100,14 +98,14 @@
                 android:id="@+id/digit_color_legal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Legality" />
+                android:text="@string/legality" />
 
             <RadioButton
                 android:id="@+id/digit_color_correct"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="Correctness" />
+                android:text="@string/correctness" />
         </RadioGroup>
     </TableRow>
 
@@ -128,7 +126,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Difficulty"
+        android:text="@string/difficulty"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/TableRow_color_rule"
         app:layout_constraintStart_toStartOf="@+id/TableRow_color_rule"
@@ -148,7 +146,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Hard"
+            android:text="@string/hard"
             android:textAlignment="center" />
 
         <TextView
@@ -156,7 +154,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Medium"
+            android:text="@string/medium"
             android:textAlignment="center" />
 
         <TextView
@@ -164,7 +162,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Easy"
+            android:text="@string/easy"
             android:textAlignment="center" />
 
     </TableRow>
@@ -174,7 +172,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Preferences"
+        android:text="@string/preferences"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="@+id/TableRow_peer_cell"
         app:layout_constraintStart_toStartOf="@+id/TableRow_peer_cell"

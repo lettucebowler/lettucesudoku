@@ -12,15 +12,17 @@
     <string name="button_reset">New Game</string>
     <string name="button_hint">hint</string>
     <string name="button_remove">remove</string>
+    <string name="button_start">start game</string>
+    <string name="button_resume">resume game</string>
+    <string name="peer_cell_label">Highlight Peer Cells</string>
+    <string name="peer_digit_label">Highlight Peer Digits</string>
+    <string name="color_rule_label">Rule For Text Coloring</string>
+    <string name="legality">Legality</string>
+    <string name="correctness">Correctness</string>
+    <string name="easy">Easy</string>
+    <string name="medium">Medium</string>
+    <string name="hard">Hard</string>
+    <string name="difficulty">Difficulty</string>
+    <string name="preferences">Preferences</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="button_small">small board</string>
-    <string name="button_medium">medium board</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>
