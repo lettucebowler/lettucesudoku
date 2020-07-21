@@ -86,7 +86,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1.5"
-            android:contentDescription="settings button"
+            android:contentDescription="@string/settings_button_description"
             android:scaleType="centerInside"
             app:srcCompat="@drawable/hamburger_icon"></view>
 
@@ -97,7 +97,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="Button"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/game_buttons"
         app:layout_constraintEnd_toEndOf="@+id/game_buttons" />
