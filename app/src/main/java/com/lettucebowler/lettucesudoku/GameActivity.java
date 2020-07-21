@@ -168,6 +168,7 @@ public class GameActivity extends AppCompatActivity {
     private void openMenu() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("from_game", true);
+        saveGame();
         startActivity(intent);
     }
 
