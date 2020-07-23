@@ -376,19 +376,13 @@ public class GameActivity extends AppCompatActivity {
 
     private void highlightPeerCells(int peer_color, int selected_color) {
         current_board = getCurrentBoard();
+        int start_row = selected_row / block_size * block_size;
+        int start_col = selected_col / block_size * block_size;
         // Highlight cells in came row or column
         for(int i = 0; i < board_size; i++) {
             button_grid[selected_row][i].setBackgroundColor(peer_color);
             button_grid[i][selected_col].setBackgroundColor(peer_color);
-        }
-
-        // Highlight cells in same block
-        int start_row = selected_row / block_size * block_size;
-        int start_col = selected_col / block_size * block_size;
-        for(int i = 0; i < block_size; i++) {
-            for(int j = 0; j < block_size; j++) {
-                button_grid[start_row + i][start_col + j].setBackgroundColor(peer_color);
-            }
+            button_grid[start_row + i / block_size][start_col + i % block_size].setBackgroundColor(peer_color);
         }
         button_grid[selected_row][selected_col].setBackgroundColor(selected_color);
     }
@@ -410,18 +404,23 @@ public class GameActivity extends AppCompatActivity {
         highlightOnClick(color_correct_bg_light, color_correct_bg_dark, board_bg);
 
         if(do_legality) {
-            recolorDigits();
+            recolorDigits(row, col);
         }
         else {
             recolorDigit(row, col);
         }
     }
 
-    private void recolorDigits() {
+    private void recolorDigits(int row, int col) {
+        int start_row = selected_row / block_size * block_size;
+        int start_col = selected_col / block_size * block_size;
         for(int i = 0; i < board_size; i++) {
-            for(int j = 0; j < board_size; j++) {
-                recolorDigit(i, j);
-            }
+//            for(int j = 0; j < board_size; j++) {
+//                recolorDigit(i, j);
+//            }
+            recolorDigit(row, i);
+            recolorDigit(i, col);
+            recolorDigit(start_row + i / block_size, start_col + i % block_size);
         }
     }
 
@@ -548,7 +547,7 @@ public class GameActivity extends AppCompatActivity {
         highlightBoard(board_bg);
         configureHintButton();
         populateBoard();
-        recolorDigits();
+//        recolorDigits();
     }
 
     private void doMove(int num, int row, int col) {
