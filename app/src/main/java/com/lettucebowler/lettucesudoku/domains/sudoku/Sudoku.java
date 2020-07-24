@@ -86,7 +86,7 @@ public class Sudoku {
     }
 
     private void scrambleBoard() {
-        int max_iterations = 30;
+        int max_iterations = 15;
         scrambleRows(getRandom(max_iterations));
         scrambleCols(getRandom(max_iterations));
         randomizeDigits();
@@ -111,8 +111,8 @@ public class Sudoku {
         int pos2;
         do {
             pos2 = getRandom(this.cell_size);
-            pos2 = (pos1 / this.cell_size) * this.cell_size + pos2;
-        } while(pos1 / this.cell_size != pos2 / this.cell_size);
+            pos2 = (pos1 / this.cell_size) + pos2;
+        } while(pos1 == pos2);
         return new int[]{pos1, pos2};
     }
 
