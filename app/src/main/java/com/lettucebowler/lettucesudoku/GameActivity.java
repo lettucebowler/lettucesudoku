@@ -84,6 +84,7 @@ public class GameActivity extends AppCompatActivity {
         super.onResume();
         readSharedPrefs();
         highlightOnClick(color_correct_bg_light, color_correct_bg_dark, board_bg);
+        updateBoard();
     }
 
     private void readSharedPrefs() {
