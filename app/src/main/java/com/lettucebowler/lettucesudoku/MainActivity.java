@@ -136,9 +136,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean getDoLegality() {
-        int id = color_rule.getCheckedRadioButtonId();
-        RadioButton button =  findViewById(id);
-        return button != null && ((RadioButton)color_rule.getChildAt(0)).isChecked();
+        return ((RadioButton)color_rule.getChildAt(0)).isChecked();
     }
 
     private boolean getDoPeerDigits() {
